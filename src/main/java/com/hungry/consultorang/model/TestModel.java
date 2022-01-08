@@ -1,14 +1,11 @@
 package com.hungry.consultorang.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hungry.consultorang.model.ParentModel;
+import lombok.*;
 
-@AllArgsConstructor
-@Getter
-@Setter
-public class TestModel {
+
+public class TestModel extends ParentModel {
     int id;
-    String name;
+    String nameVal;
 }

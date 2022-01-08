@@ -2,7 +2,22 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="common">
-    <select id="getUserList" resultType="HashMap">
-        select * from USER
+
+    <select id="getUserList" resultType="UserModel">
+        <![CDATA[
+            select * from USER
+        ]]>
     </select>
+
+    <insert id="insertUser">
+        <![CDATA[
+            INSERT INTO USER
+            VALUE(
+                #{userId},
+                #{id},
+                #{pw},
+                #{name}
+            )
+        ]]>
+    </insert>
 </mapper>
