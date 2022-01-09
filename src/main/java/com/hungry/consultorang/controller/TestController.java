@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,11 +29,15 @@ public class TestController {
         this.testService = testService;
     }
 
-    @GetMapping("/hello")
-    public ResponseEntity<TestModel> helloWorld(){
+    @PostMapping("/hello")
+    public ResponseEntity<RestResponse> helloWorld(@RequestBody UserModel param){
 
-        //return new ResponseEntity<TestModel>(new TestModel(10, "sim"), HttpStatus.OK);
-        return null;
+        log.info(param.toString());
+
+        RestResponse ret = new RestResponse();
+
+        return new ResponseEntity<RestResponse>(ret.setSuccess(param), HttpStatus.OK);
+
     }
 
     @Transactional
@@ -49,10 +55,10 @@ public class TestController {
     @GetMapping("/insertList")
     public ResponseEntity<String> insertList() throws Exception{
 
-        for(int i=21; i<25; i++){
+        for(int i=25; i<=30; i++){
             //UserModel um = new UserModel(i, "hi", "hi", "sim");
             //commonDao.insert("common.insertUser", um);
-            if(i==24)
+            if(i==30)
                 throw new IOException();
 
         }

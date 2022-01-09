@@ -16,10 +16,6 @@ public class CommonDao {
         this.sqlSession = sqlSession;
     }
 
-    public List<HashMap<String, Object>> getUser(){
-        return sqlSession.selectList("common.getUserList");
-    }
-
     public Object selectOne(String statement, ParentModel param){
         return sqlSession.selectOne(statement, param);
     }
