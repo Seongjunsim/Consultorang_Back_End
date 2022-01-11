@@ -12,12 +12,21 @@
     <insert id="insertUser">
         <![CDATA[
             INSERT INTO USER
+            (user_email, user_pw, user_name)
             VALUE(
-                #{userId},
-                #{id},
-                #{pw},
-                #{name}
+                #{userEmail},
+                #{userPw},
+                #{userName}
             )
         ]]>
     </insert>
+
+    <select id="login">
+        <![CDATA[
+            SELECT
+                user_pw
+            FROM USER
+            WHERE user_id=#{userEmail}
+        ]]>
+    </select>
 </mapper>

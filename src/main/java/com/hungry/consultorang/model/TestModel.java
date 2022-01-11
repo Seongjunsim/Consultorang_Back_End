@@ -6,6 +6,7 @@ import com.hungry.consultorang.model.ParentModel;
 import lombok.*;
 
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class TestModel extends ParentModel {
     int id;
     String nameVal;

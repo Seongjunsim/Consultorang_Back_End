@@ -5,12 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hungry.consultorang.model.ParentModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class UserModel extends ParentModel {
     int userId;
-    String id;
-    String pw;
-    String name;
+    String userEmail;
+    String userPw;
+    String userName;
 }
