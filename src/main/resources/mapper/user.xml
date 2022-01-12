@@ -3,6 +3,19 @@
 
 <mapper namespace="common">
 
+    <select id="getUser" resultType="UserModel">
+        <![CDATA[
+            SELECT
+                USER_ID,
+                USER_EMAIL,
+                USER_PW,
+                USER_NAME
+            FROM
+                USER
+            WHERE USER_EMAIL=#{userEmail}
+        ]]>
+    </select>
+
     <select id="getUserList" resultType="UserModel">
         <![CDATA[
             select * from USER

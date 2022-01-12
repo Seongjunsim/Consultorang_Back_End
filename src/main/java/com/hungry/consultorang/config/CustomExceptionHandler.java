@@ -33,7 +33,8 @@ public class CustomExceptionHandler {
     public ResponseEntity<RestResponse> unkwonExceptionHandler
             (HttpServletRequest request, Exception e){
         RestResponse ret = new RestResponse();
-        log.error(e.getMessage());
+        log.error(e.toString());
+        e.printStackTrace();
         return new ResponseEntity<RestResponse>(ret.setProgrammingFail(e), HttpStatus.BAD_REQUEST);
     }
 }

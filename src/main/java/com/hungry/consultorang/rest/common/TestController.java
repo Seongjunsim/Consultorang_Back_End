@@ -1,5 +1,6 @@
 package com.hungry.consultorang.rest.common;
 
+import com.hungry.consultorang.common.exception.LoginException;
 import com.hungry.consultorang.common.response.RestResponse;
 import com.hungry.consultorang.model.ParentModel;
 import com.hungry.consultorang.model.UserModel;
@@ -16,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 
 
-@Controller
+@Controller("/common")
 @Slf4j
 public class TestController {
 
@@ -40,7 +41,7 @@ public class TestController {
 
     @Transactional
     @GetMapping("/getUserList")
-    public ResponseEntity<RestResponse> getUserList(){
+    public ResponseEntity<RestResponse> getUserList() throws Exception{
 
         RestResponse response = new RestResponse();
 
