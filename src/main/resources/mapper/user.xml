@@ -3,6 +3,19 @@
 
 <mapper namespace="common">
 
+    <select id="getUser" resultType="UserModel">
+        <![CDATA[
+            SELECT
+                USER_ID,
+                USER_EMAIL,
+                USER_PW,
+                USER_NAME
+            FROM
+                USER
+            WHERE USER_EMAIL=#{userEmail}
+        ]]>
+    </select>
+
     <select id="getUserList" resultType="UserModel">
         <![CDATA[
             select * from USER
@@ -12,12 +25,21 @@
     <insert id="insertUser">
         <![CDATA[
             INSERT INTO USER
+            (user_email, user_pw, user_name)
             VALUE(
-                #{userId},
-                #{id},
-                #{pw},
-                #{name}
+                #{userEmail},
+                #{userPw},
+                #{userName}
             )
         ]]>
     </insert>
+
+    <select id="login">
+        <![CDATA[
+            SELECT
+                user_pw
+            FROM USER
+            WHERE user_id=#{userEmail}
+        ]]>
+    </select>
 </mapper>

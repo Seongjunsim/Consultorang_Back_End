@@ -1,4 +1,4 @@
-package com.hungry.consultorang.service.test;
+package com.hungry.consultorang.rest.common;
 
 import com.hungry.consultorang.model.ParentModel;
 import com.hungry.consultorang.model.TestModel;

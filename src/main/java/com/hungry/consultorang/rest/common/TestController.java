@@ -1,22 +1,23 @@
-package com.hungry.consultorang.controller;
+package com.hungry.consultorang.rest.common;
 
+import com.hungry.consultorang.common.exception.LoginException;
 import com.hungry.consultorang.common.response.RestResponse;
 import com.hungry.consultorang.model.ParentModel;
-import com.hungry.consultorang.model.TestModel;
 import com.hungry.consultorang.model.UserModel;
-import com.hungry.consultorang.service.test.TestService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.IOException;
 import java.util.List;
 
 
-@Controller
+@Controller("/common")
 @Slf4j
 public class TestController {
 
@@ -27,16 +28,20 @@ public class TestController {
         this.testService = testService;
     }
 
-    @GetMapping("/hello")
-    public ResponseEntity<TestModel> helloWorld(){
+    @PostMapping("/hello")
+    public ResponseEntity<RestResponse> helloWorld(@RequestBody UserModel param){
 
-        //return new ResponseEntity<TestModel>(new TestModel(10, "sim"), HttpStatus.OK);
-        return null;
+        log.info(param.toString());
+
+        RestResponse ret = new RestResponse();
+
+        return new ResponseEntity<RestResponse>(ret.setSuccess(param), HttpStatus.OK);
+
     }
 
     @Transactional
     @GetMapping("/getUserList")
-    public ResponseEntity<RestResponse> getUserList(){
+    public ResponseEntity<RestResponse> getUserList() throws Exception{
 
         RestResponse response = new RestResponse();
 
@@ -49,10 +54,10 @@ public class TestController {
     @GetMapping("/insertList")
     public ResponseEntity<String> insertList() throws Exception{
 
-        for(int i=21; i<25; i++){
+        for(int i=25; i<=30; i++){
             //UserModel um = new UserModel(i, "hi", "hi", "sim");
             //commonDao.insert("common.insertUser", um);
-            if(i==24)
+            if(i==30)
                 throw new IOException();
 
         }
