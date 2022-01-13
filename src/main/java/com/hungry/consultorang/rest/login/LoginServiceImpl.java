@@ -2,6 +2,7 @@ package com.hungry.consultorang.rest.login;
 
 import com.hungry.consultorang.common.dao.CommonDao;
 import com.hungry.consultorang.common.exception.LoginException;
+import com.hungry.consultorang.common.provider.JwtTokenProvider;
 import com.hungry.consultorang.model.UserModel;
 import com.hungry.consultorang.model.login.SignInRequestModel;
 import com.hungry.consultorang.model.login.SignInResponseModel;

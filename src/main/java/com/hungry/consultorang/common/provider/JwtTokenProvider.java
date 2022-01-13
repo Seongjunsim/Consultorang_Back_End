@@ -1,4 +1,4 @@
-package com.hungry.consultorang.rest.login;
+package com.hungry.consultorang.common.provider;
 
 import com.hungry.consultorang.config.EnvSet;
 import com.hungry.consultorang.model.UserModel;

@@ -2,7 +2,7 @@ package com.hungry.consultorang.config;
 
 
 import com.hungry.consultorang.common.exception.LoginException;
-import com.hungry.consultorang.rest.login.JwtTokenProvider;
+import com.hungry.consultorang.common.provider.JwtTokenProvider;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 

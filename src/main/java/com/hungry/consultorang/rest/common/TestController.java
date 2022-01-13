@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 
 
-@Controller("/common")
+@Controller
 @Slf4j
 public class TestController {
 
