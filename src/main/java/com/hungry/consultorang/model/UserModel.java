@@ -8,11 +8,18 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @EqualsAndHashCode(callSuper=false)
 public class UserModel extends ParentModel {
     int userId;
-    String userEmail;
-    String userPw;
-    String userName;
+    String email;
+    String pw;
+    String businessName;
+    String businessNum;
+    String phone;
+    String businessCd;
+    String serviceYn;
+    Date regDt;
 }
