@@ -16,15 +16,15 @@ public class CommonDao {
         this.sqlSession = sqlSession;
     }
 
-    public Object selectOne(String statement, ParentModel param){
+    public Object selectOne(String statement, Object param){
         return sqlSession.selectOne(statement, param);
     }
 
-    public List<ParentModel> selectList(String statement){
+    public List<Object> selectList(String statement){
         return sqlSession.selectList(statement);
     }
 
-    public List<ParentModel> selectList(String statement, ParentModel param){
+    public List<Object> selectList(String statement, Object param){
         return sqlSession.selectList(statement, param);
     }
 

@@ -23,7 +23,7 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public List<ParentModel> getUserList() {
+    public List<Object> getUserList() {
         return commonDao.selectList("common.getUserList");
     }
 }

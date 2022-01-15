@@ -34,7 +34,7 @@ public class JwtTokenProvider {
         Map<String, Object> payloads = new HashMap<>();
         payloads.put("exp", validDate);
         payloads.put("userId", userModel.getUserId());
-        payloads.put("userName", userModel.getUserName());
+        //payloads.put("userName", userModel.getUserName());
 
         byte[] keyByte = envSet.getSecretKey().getBytes(StandardCharsets.UTF_8);
         Key key = Keys.hmacShaKeyFor(keyByte);

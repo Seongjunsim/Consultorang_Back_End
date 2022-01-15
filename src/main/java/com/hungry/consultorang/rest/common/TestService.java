@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface TestService {
     public TestModel getUser();
-    public List<ParentModel> getUserList();
+    public List<Object> getUserList();
 }

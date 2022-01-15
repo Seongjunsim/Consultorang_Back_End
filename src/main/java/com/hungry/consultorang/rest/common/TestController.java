@@ -45,7 +45,7 @@ public class TestController {
 
         RestResponse response = new RestResponse();
 
-        List<ParentModel> ret = testService.getUserList();
+        List<Object> ret = testService.getUserList();
 
         return new ResponseEntity<RestResponse>(response.setSuccess(ret), HttpStatus.OK);
     }
