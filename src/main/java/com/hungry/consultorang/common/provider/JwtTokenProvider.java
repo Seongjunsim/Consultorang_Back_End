@@ -1,7 +1,7 @@
 package com.hungry.consultorang.common.provider;
 
 import com.hungry.consultorang.config.EnvSet;
-import com.hungry.consultorang.model.UserModel;
+import com.hungry.consultorang.model.dto.UserModel;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.security.KeyStore;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;

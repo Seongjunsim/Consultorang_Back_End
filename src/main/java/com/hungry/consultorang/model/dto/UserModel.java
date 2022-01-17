@@ -1,4 +1,4 @@
-package com.hungry.consultorang.model;
+package com.hungry.consultorang.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
