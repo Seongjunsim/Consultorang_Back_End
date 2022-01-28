@@ -10,11 +10,8 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class SignUpRequestModel extends ParentModel {
-    private String businessName;
     private String email;
     private String pw;
     private String phone;
-    private String businessNum;
-    private String businessCd;
     private String serviceYn;
 }

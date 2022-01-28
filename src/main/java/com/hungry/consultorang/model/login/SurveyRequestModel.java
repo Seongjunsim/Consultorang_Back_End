@@ -7,6 +7,8 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class SurveyRequestModel extends ParentModel {
+    private String businessNum;
+    private String businessName;
     private String businessType;
     private String businessIngre;
     private String businessCookway;
