@@ -26,7 +26,8 @@
             	A.cat_id,
             	A.menu_id,
             	A.sale_quantity,
-            	B.menu_cost
+            	B.menu_cost,
+            	B.menu_nm
             FROM SALES A
             INNER JOIN MENUS B
                 ON A.menu_id = B.menu_id
@@ -35,6 +36,15 @@
                 AND A.cat_id = #{catId}
             ORDER BY B.menu_cost DESC
             LIMIT #{size}
+        ]]>
+    </select>
+
+    <select id="getCatName" resultType="String">
+        <![CDATA[
+            SELECT
+                cat_nm
+            FROM CATEGORY
+            WHERE cat_id = #{catId}
         ]]>
     </select>
 
