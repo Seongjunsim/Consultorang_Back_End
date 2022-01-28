@@ -6,14 +6,11 @@
     <insert id="insertUser">
         <![CDATA[
             INSERT INTO USER
-            (email, pw, phone, business_num, business_cd, business_name,service_yn, reg_dt)
+            (email, pw, phone, service_yn, reg_dt)
             VALUE(
                 #{email},
                 #{pw},
                 #{phone},
-                #{businessNum},
-                #{businessCd},
-                #{businessName},
                 #{serviceYn},
                 NOW()
             )
@@ -35,4 +32,25 @@
             WHERE email=#{email}
         ]]>
     </select>
+
+    <insert id="enrollSurvey">
+        <![CDATA[
+            INSERT INTO BUSINESS
+            (business_num, business_name, business_type, business_ingre,
+            business_cookway, business_alcohol, business_already, business_staff, business_hours)
+            VALUE(
+                #{businessNum},
+                #{businessName},
+                #{businessType},
+                #{businessIngre},
+                #{businessCookway},
+                #{businessAlcohol},
+                #{businessAlready},
+                #{businessStaff},
+                #{businessHours},
+                NOW()
+            )
+        ]]>
+    </insert>
+
 </mapper>
