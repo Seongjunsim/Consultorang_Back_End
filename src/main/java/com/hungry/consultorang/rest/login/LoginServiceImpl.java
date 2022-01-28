@@ -4,10 +4,7 @@ import com.hungry.consultorang.common.dao.CommonDao;
 import com.hungry.consultorang.common.exception.LoginException;
 import com.hungry.consultorang.common.provider.JwtTokenProvider;
 import com.hungry.consultorang.model.dto.UserModel;
-import com.hungry.consultorang.model.login.SignInRequestModel;
-import com.hungry.consultorang.model.login.SignInResponseModel;
-import com.hungry.consultorang.model.login.SignUpRequestModel;
-import com.hungry.consultorang.model.login.SignUpResponseModel;
+import com.hungry.consultorang.model.login.*;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -36,7 +33,7 @@ public class LoginServiceImpl implements LoginService{
             .pw(user.getPw())
             .userId(user.getUserId())
             .email(user.getEmail())
-            .businessName(user.getBusinessName())
+            //.businessName(user.getBusinessName())
             .token(token)
             .build();
         return ret;
@@ -46,11 +43,12 @@ public class LoginServiceImpl implements LoginService{
     public SignUpResponseModel signUp(SignUpRequestModel param) throws Exception {
         commonDao.insert("login.insertUser", param);
         SignUpResponseModel ret = SignUpResponseModel.builder()
-            .businessName(param.getBusinessName())
+            //.businessName(param.getBusinessName())
             .pw(param.getPw())
             .email(param.getEmail()).build();
         return ret;
     }
+
 
     @Override
     public HashMap<String, Object> checkEmail(HashMap<String, String> param) throws Exception {
