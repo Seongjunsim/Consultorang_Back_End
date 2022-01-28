@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 public class SignInResponseModel extends ParentModel {
     int userId;
     String email;
-    //String businessName;
+    String businessName;
     String pw;
     String token;
 }

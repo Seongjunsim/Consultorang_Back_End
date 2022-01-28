@@ -33,7 +33,7 @@ public class LoginServiceImpl implements LoginService{
             .pw(user.getPw())
             .userId(user.getUserId())
             .email(user.getEmail())
-            //.businessName(user.getBusinessName())
+            .businessName(user.getBusinessName())
             .token(token)
             .build();
         return ret;
@@ -42,8 +42,10 @@ public class LoginServiceImpl implements LoginService{
     @Override
     public SignUpResponseModel signUp(SignUpRequestModel param) throws Exception {
         commonDao.insert("login.insertUser", param);
+        commonDao.insert("login.insertBusiness", param);
+
         SignUpResponseModel ret = SignUpResponseModel.builder()
-            //.businessName(param.getBusinessName())
+            .businessName(param.getBusinessName())
             .pw(param.getPw())
             .email(param.getEmail()).build();
         return ret;
