@@ -17,6 +17,26 @@
         ]]>
     </insert>
 
+    <insert id="insertBusiness">
+        <![CDATA[
+        INSERT INTO BUSINESS
+            (business_num, business_name, business_type, business_ingre,
+            business_cookway, business_alcohol, business_already, business_staff, business_hours)
+            VALUE(
+                #{businessNum},
+                #{businessName},
+                #{businessType},
+                #{businessIngre},
+                #{businessCookway},
+                #{businessAlcohol},
+                #{businessAlready},
+                #{businessStaff},
+                #{businessHours},
+                NOW()
+            )
+            ]]>
+    </insert>
+
     <select id="getUser" resultType="UserModel">
         <![CDATA[
             SELECT * FROM USER
@@ -33,24 +53,5 @@
         ]]>
     </select>
 
-    <insert id="enrollSurvey">
-        <![CDATA[
-            INSERT INTO BUSINESS
-            (business_num, business_name, business_type, business_ingre,
-            business_cookway, business_alcohol, business_already, business_staff, business_hours)
-            VALUE(
-                #{businessNum},
-                #{businessName},
-                #{businessType},
-                #{businessIngre},
-                #{businessCookway},
-                #{businessAlcohol},
-                #{businessAlready},
-                #{businessStaff},
-                #{businessHours},
-                NOW()
-            )
-        ]]>
-    </insert>
 
 </mapper>
