@@ -13,5 +13,4 @@ public class SignUpResponseModel extends ParentModel {
     String email;
     String businessName;
     String pw;
-    String token;
 }

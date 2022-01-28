@@ -20,9 +20,11 @@
     <insert id="insertBusiness">
         <![CDATA[
         INSERT INTO BUSINESS
-            (business_num, business_name, business_type, business_ingre,
-            business_cookway, business_alcohol, business_already, business_staff, business_hours)
+            (user_id, business_num, business_name, business_type, business_ingre,
+            business_cookway, business_alcohol, business_already, business_staff, business_hours,
+            reg_dt)
             VALUE(
+                #{userId},
                 #{businessNum},
                 #{businessName},
                 #{businessType},
@@ -42,6 +44,15 @@
             SELECT * FROM USER
             WHERE email=#{email}
         ]]>
+    </select>
+
+    <select id="getUserId" resultType="int">
+        <![CDATA[
+            SELECT user_id FROM USER
+            WHERE email=#{email}
+        ]]>
+
+
     </select>
 
     <select id="checkEmail" resultType="int">
