@@ -3,6 +3,7 @@ package com.hungry.consultorang.rest.engine;
 import com.hungry.consultorang.common.response.RestResponse;
 import com.hungry.consultorang.model.engine.CatEngineRequestModel;
 import com.hungry.consultorang.model.engine.CatEngineResponseModel;
+import com.hungry.consultorang.model.engine.ParsingExcelFileModel;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.*;
@@ -35,6 +36,16 @@ public class EngineController {
         CatEngineResponseModel ret = engineService.getCatEngine(param);
 
         return new ResponseEntity<RestResponse>(res.setSuccess(ret), HttpStatus.OK);
+    }
+
+    @PostMapping("/insertExcel")
+    public ResponseEntity<RestResponse> insertExcel(@RequestBody ParsingExcelFileModel param)
+        throws Exception{
+        RestResponse res = new RestResponse();
+        param.setFileNm("C:/Users/USER/Documents/test.xlsx");
+        engineService.parsingExcelFile(param);
+
+        return new ResponseEntity<RestResponse>(res.setSuccess(), HttpStatus.OK);
     }
 
 

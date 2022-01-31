@@ -26,7 +26,7 @@ public class ExcelParserUtil {
     public int getColSize(int row){return sheet.getRow(row).getPhysicalNumberOfCells()+1;}
 
     public String getCellData(int row, int col){
-        if(row < 0 || col < 0 || row >= rowSize || col >=getColSize(row)) return null;
+        if(row < 0 || col < 0 || row > rowSize || col >getColSize(row)) return null;
         String val="";
         XSSFCell cell = sheet.getRow(row).getCell(col);
         if(cell==null) return null;

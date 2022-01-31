@@ -104,26 +104,20 @@ public class EngineServiceImpl implements EngineService{
     @Override
     public void parsingExcelFile(ParsingExcelFileModel param) throws Exception {
 
-        int userId = param.getUser_id();
+        int userId = param.getUserId();
         ExcelParserUtil parserUtil = new ExcelParserUtil(param.getFileNm(), envSet.getExcelSheetNum());
 
         int rowSize = parserUtil.getRowSize();
 
-        int catId = 0;
-        int menuId = 0;
+        int catId = 0; int menuId = 0;
 
-        int row = 6;
-        int totalCnt=0;
-        int totalSale=0;
+        int row = 6; int totalCnt=0; int totalSale=0;
 
-        int catCnt=0;
-        int catSale=0;
+        int catCnt=0; int catSale=0;
 
-        int aveCnt=0;
-        int aveSale=0;
+        int aveCnt=0; int aveSale=0;
 
-        int menuSize=0;
-        int menuSaleMax=0; int menuSaleMin=0; int menuCntMax=0; int menuCntMin=0;
+        int menuSize=0; int menuSaleMax=0; int menuSaleMin=0; int menuCntMax=0; int menuCntMin=0;
 
         String catNm="";
         HashMap<String, Object> reqParam = new HashMap<>();
@@ -140,6 +134,7 @@ public class EngineServiceImpl implements EngineService{
             }
 
             String temp = parserUtil.getCellData(row,0).trim();
+            String what = envSet.getCategory();
             if(temp.contains(envSet.getCategory())){//카테고리
                 catCnt =
                     (int)Double.parseDouble(parserUtil.getCellData(row, envSet.getCnt()));
@@ -159,7 +154,7 @@ public class EngineServiceImpl implements EngineService{
                 reqParam.put("catId", ++catId);
                 reqParam.put("userId", userId);
                 reqParam.put("catNm", catNm);
-                reqParam.put("saleYm", param.getSale_ym());
+                reqParam.put("saleYm", param.getSaleYm());
                 commonDao.insert("engine.insertCat", reqParam);
                 reqParam.clear();
             }else{ //menu
@@ -180,7 +175,7 @@ public class EngineServiceImpl implements EngineService{
                 String menuEngineCd=generateCd(conMargin, popularity);
 
                 reqParam.put("userId", userId);
-                reqParam.put("saleYm", param.getSale_ym());
+                reqParam.put("saleYm", param.getSaleYm());
                 reqParam.put("catId", catId);
                 reqParam.put("menuId", menuId);
                 reqParam.put("saleQuantity", saleQuantity);
@@ -205,7 +200,7 @@ public class EngineServiceImpl implements EngineService{
         int maxSale = 0;
         int maxCnt = 0;
         while(++row <= util.getRowSize()){
-            if(util.getCellData(row,0).trim().equals(envSet.getCategory()))
+            if(util.getCellData(row,0)==null||util.getCellData(row,0).trim().contains(envSet.getCategory()))
                 break;
             int sale = (int) Double.parseDouble(util.getCellData(row, envSet.getSale()));
             int cnt = (int) Double.parseDouble(util.getCellData(row,envSet.getCnt()));

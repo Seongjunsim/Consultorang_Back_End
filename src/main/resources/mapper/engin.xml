@@ -48,36 +48,25 @@
         ]]>
     </select>
 
-    <insert id="insertUser">
+    <insert id="insertCat">
         <![CDATA[
-            INSERT INTO USER
-            (email, pw, phone, business_num, business_cd, business_name,service_yn, reg_dt)
-            VALUE(
-                #{email},
-                #{pw},
-                #{phone},
-                #{businessNum},
-                #{businessCd},
-                #{businessName},
-                #{serviceYn},
-                NOW()
-            )
+            INSERT INTO CATEGORY
+            (cat_id, user_id, cat_nm, sale_ym, reg_dt)
+            VALUES
+            (#{catId},#{userId},#{catNm},#{saleYm},NOW())
         ]]>
     </insert>
 
-    <select id="getUser" resultType="UserModel">
+    <insert id="insertMenu">
         <![CDATA[
-            SELECT * FROM USER
-            WHERE email=#{email}
+            INSERT INTO SALES
+            (user_id, sale_ym, cat_id, menu_id,
+             sale_quantity, menu_cost, menu_nm, popularity,
+             contribution_margin, menu_engine_cd, reg_dt)
+            VALUES
+            (#{userId}, #{saleYm}, #{catId}, #{menuId},
+             #{saleQuantity}, #{menuCost}, #{menuNm},
+             #{popularity}, #{contributionMargin}, #{menuEngineCd}, NOW())
         ]]>
-    </select>
-
-    <select id="checkEmail" resultType="int">
-        <![CDATA[
-            SELECT
-                COUNT(0) CNT
-            FROM USER
-            WHERE email=#{email}
-        ]]>
-    </select>
+    </insert>
 </mapper>

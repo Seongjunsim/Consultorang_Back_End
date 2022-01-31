@@ -8,7 +8,7 @@ import org.apache.poi.poifs.property.Parent;
 @Data
 @EqualsAndHashCode
 public class ParsingExcelFileModel extends ParentModel {
-    String sale_ym;
-    int user_id;
+    String saleYm;
+    int userId;
     String fileNm;
 }
