@@ -20,4 +20,5 @@ public class EnvSet {
     int salePercent;
     int menuCost;
     int menuNm;
+    String excelPath;
 }

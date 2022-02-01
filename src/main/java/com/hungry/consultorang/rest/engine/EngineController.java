@@ -10,12 +10,13 @@ import org.apache.poi.xssf.usermodel.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 
 @Controller
 @RequestMapping(value="/engine")
@@ -39,10 +40,10 @@ public class EngineController {
     }
 
     @PostMapping("/insertExcel")
-    public ResponseEntity<RestResponse> insertExcel(@RequestBody ParsingExcelFileModel param)
+    public ResponseEntity<RestResponse> insertExcel(
+        @ModelAttribute ParsingExcelFileModel param)
         throws Exception{
         RestResponse res = new RestResponse();
-        param.setFileNm("C:/Users/USER/Documents/test.xlsx");
         engineService.parsingExcelFile(param);
 
         return new ResponseEntity<RestResponse>(res.setSuccess(), HttpStatus.OK);
@@ -50,48 +51,17 @@ public class EngineController {
 
 
     @PostMapping("/test")
-    public ResponseEntity<RestResponse> test() throws Exception{
+    public ResponseEntity<RestResponse> test(
+        @ModelAttribute ParsingExcelFileModel param) throws Exception{
 
-        FileInputStream file = new FileInputStream("C:/Users/USER/Documents/test.xlsx");
-        XSSFWorkbook workbook = new XSSFWorkbook(file);
+        String sourceFileNm = param.getMultipartFile().getOriginalFilename();
 
-        int rowindex = 0;
-        int columnindex = 0;
+        File df;
+        String dfnm;
+        // TODO: 2022-02-01 file util 에 현 시간 기준으로 파일 생성 ~~_
 
-        XSSFSheet sheet = workbook.getSheetAt(1);
-        int rows=sheet.getPhysicalNumberOfRows();
-        for(rowindex=0;rowindex<=rows;rowindex++){ //행을읽는다
-            XSSFRow row=sheet.getRow(rowindex);
-            if(row !=null){//셀의 수
-                int cells=row.getPhysicalNumberOfCells();
-                for(columnindex=0; columnindex<=cells; columnindex++){
-                    //셀값을 읽는다
-                    XSSFCell cell=row.getCell(columnindex);
-                    String value="";
-                    //셀이 빈값일경우를 위한 널체크
-                    if(cell==null){
-                        continue;
-                    }
-                    else{ //타입별로 내용 읽기
-                        CellType type = cell.getCellType();
-                        switch (type.name()){
-                            case "FORMULA":
-                            case "NUMERIC":
-                                value=cell.getNumericCellValue()+"";
-                                break;
-                            case "STRING":
-                                value=cell.getStringCellValue()+"";
-                                break;
-                            case "BOOLEAN":
-                                value=cell.getBooleanCellValue()+"";
-                                break;
-                        }
-                    }
-                    System.out.println(rowindex+"row : "+columnindex+"coll :" +
-                        new String(value.getBytes(StandardCharsets.UTF_8), "utf-8"));
-                }
-            }
-        }
+        df = new File("C:/Users/USER/Desktop/test/"+sourceFileNm);
+        param.getMultipartFile().transferTo(df);
 
         return null;
     }

@@ -10,14 +10,15 @@ import java.io.FileInputStream;
 public class ExcelParserUtil {
 
     private String fileNm;
+    private FileInputStream fis;
     private XSSFWorkbook workbook;
     private XSSFSheet sheet;
     private int rowSize;
 
     public ExcelParserUtil(String fileNm, int SheetNum) throws Exception{
         this.fileNm = fileNm;
-        FileInputStream file = new FileInputStream(fileNm);
-        workbook = new XSSFWorkbook(file);
+        fis = new FileInputStream(fileNm);
+        workbook = new XSSFWorkbook(fis);
         sheet = workbook.getSheetAt(SheetNum);
         rowSize = sheet.getPhysicalNumberOfRows();
     }
@@ -46,7 +47,10 @@ public class ExcelParserUtil {
         return val;
     }
 
-
+    public void close() throws Exception{
+        workbook.close();
+        fis.close();;
+    }
 
 
 

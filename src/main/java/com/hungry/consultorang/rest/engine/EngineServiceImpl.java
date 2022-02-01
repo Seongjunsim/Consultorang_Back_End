@@ -1,6 +1,7 @@
 package com.hungry.consultorang.rest.engine;
 
 import com.hungry.consultorang.common.dao.CommonDao;
+import com.hungry.consultorang.common.exception.EngineException;
 import com.hungry.consultorang.common.util.ExcelParserUtil;
 import com.hungry.consultorang.config.EnvSet;
 import com.hungry.consultorang.model.dto.CatMenuModel;
@@ -11,6 +12,9 @@ import com.hungry.consultorang.model.engine.ParsingExcelFileModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -105,7 +109,24 @@ public class EngineServiceImpl implements EngineService{
     public void parsingExcelFile(ParsingExcelFileModel param) throws Exception {
 
         int userId = param.getUserId();
-        ExcelParserUtil parserUtil = new ExcelParserUtil(param.getFileNm(), envSet.getExcelSheetNum());
+
+        // 해당 연월의 데이터가 있는지 파악 => 있다면 예외 호출
+        int size = (int) commonDao.selectOne("engine.getMenuSize", param);
+        if(size!=0){
+           throw new EngineException("해당 연월에 이미 등록된 데이터가 있습니다.");
+        }
+
+        //엑셀 파일 생성
+        String pattern = "yyyyMMddHHmmss";
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+
+        String sourceFileNm = sdf.format(new Date())+"_"+param.getUserId()+"_"+
+            param.getMultipartFile().getOriginalFilename();
+
+        File df = new File(envSet.getExcelPath()+sourceFileNm);
+        param.getMultipartFile().transferTo(df);
+
+        ExcelParserUtil parserUtil = new ExcelParserUtil(envSet.getExcelPath()+sourceFileNm, envSet.getExcelSheetNum());
 
         int rowSize = parserUtil.getRowSize();
 
@@ -121,76 +142,86 @@ public class EngineServiceImpl implements EngineService{
 
         String catNm="";
         HashMap<String, Object> reqParam = new HashMap<>();
-        while(row<=rowSize){
-            int colSize = parserUtil.getColSize(row);
+        try{
+            while(row<=rowSize){
+                int colSize = parserUtil.getColSize(row);
 
-            if(row==6) { // total sum
-                totalCnt =
-                    (int)Double.parseDouble(parserUtil.getCellData(row, envSet.getCnt()));
-                totalSale =
-                    (int)Double.parseDouble(parserUtil.getCellData(row, envSet.getSale()));
+                if(row==6) { // total sum
+                    totalCnt =
+                        (int)Double.parseDouble(parserUtil.getCellData(row, envSet.getCnt()));
+                    totalSale =
+                        (int)Double.parseDouble(parserUtil.getCellData(row, envSet.getSale()));
+                    row++;
+                    continue;
+                }
+
+                String temp = parserUtil.getCellData(row,0).trim();
+                String what = envSet.getCategory();
+                if(temp.contains(envSet.getCategory())){//카테고리
+                    catCnt =
+                        (int)Double.parseDouble(parserUtil.getCellData(row, envSet.getCnt()));
+                    catSale =
+                        (int)Double.parseDouble(parserUtil.getCellData(row, envSet.getSale()));
+                    catNm =
+                        temp.split(":")[1];
+                    HashMap<String, Integer> hm = getMenuSizeMinMax(row, parserUtil);
+                    menuSize=hm.get("size");
+                    menuSaleMax=hm.get("maxSale");
+                    menuSaleMin=hm.get("minSale");
+                    menuCntMax=hm.get("maxCnt");
+                    menuCntMin=hm.get("minCnt");
+
+                    if(menuSize!=0){
+                        aveCnt = catCnt/menuSize;
+                        aveSale = catSale/menuSize;
+
+                        reqParam.put("catId", ++catId);
+                        reqParam.put("userId", userId);
+                        reqParam.put("catNm", catNm);
+                        reqParam.put("saleYm", param.getSaleYm());
+                        commonDao.insert("engine.insertCat", reqParam);
+                        reqParam.clear();
+                    }
+                }else{ //menu
+                    menuId =
+                        (int)Double.parseDouble(parserUtil.getCellData(row,0));
+                    int saleQuantity =
+                        (int)Double.parseDouble(parserUtil.getCellData(row, envSet.getCnt()));
+                    int menuCost =
+                        (int)Double.parseDouble(parserUtil.getCellData(row,envSet.getMenuCost()));
+                    int menuSale =
+                        (int)Double.parseDouble(parserUtil.getCellData(row, envSet.getSale()));
+                    String menuNm =
+                        parserUtil.getCellData(row, envSet.getMenuNm()).trim();
+                    if(menuCost>0){
+                        int conMargin = calcPercent(menuSale, aveSale, menuSaleMax, menuSaleMin);
+                        int popularity = calcPercent(saleQuantity, aveCnt, menuCntMax, menuCntMin);
+
+                        String menuEngineCd=generateCd(conMargin, popularity);
+
+                        reqParam.put("userId", userId);
+                        reqParam.put("saleYm", param.getSaleYm());
+                        reqParam.put("catId", catId);
+                        reqParam.put("menuId", menuId);
+                        reqParam.put("saleQuantity", saleQuantity);
+                        reqParam.put("menuCost", menuCost);
+                        reqParam.put("menuNm", menuNm);
+                        reqParam.put("popularity", popularity);
+                        reqParam.put("contributionMargin", conMargin);
+                        reqParam.put("menuEngineCd", menuEngineCd);
+                        commonDao.insert("engine.insertMenu", reqParam);
+                        reqParam.clear();
+                    }
+                }
                 row++;
-                continue;
             }
-
-            String temp = parserUtil.getCellData(row,0).trim();
-            String what = envSet.getCategory();
-            if(temp.contains(envSet.getCategory())){//카테고리
-                catCnt =
-                    (int)Double.parseDouble(parserUtil.getCellData(row, envSet.getCnt()));
-                catSale =
-                    (int)Double.parseDouble(parserUtil.getCellData(row, envSet.getSale()));
-                catNm =
-                    temp.split(":")[1];
-                HashMap<String, Integer> hm = getMenuSizeMinMax(row, parserUtil);
-                menuSize=hm.get("size");
-                menuSaleMax=hm.get("maxSale");
-                menuSaleMin=hm.get("minSale");
-                menuCntMax=hm.get("maxCnt");
-                menuCntMin=hm.get("minCnt");
-                aveCnt = catCnt/menuSize;
-                aveSale = catSale/menuSize;
-
-                reqParam.put("catId", ++catId);
-                reqParam.put("userId", userId);
-                reqParam.put("catNm", catNm);
-                reqParam.put("saleYm", param.getSaleYm());
-                commonDao.insert("engine.insertCat", reqParam);
-                reqParam.clear();
-            }else{ //menu
-                menuId =
-                    (int)Double.parseDouble(parserUtil.getCellData(row,0));
-                int saleQuantity =
-                    (int)Double.parseDouble(parserUtil.getCellData(row, envSet.getCnt()));
-                int menuCost =
-                    (int)Double.parseDouble(parserUtil.getCellData(row,envSet.getMenuCost()));
-                int menuSale =
-                    (int)Double.parseDouble(parserUtil.getCellData(row, envSet.getSale()));
-                String menuNm =
-                    parserUtil.getCellData(row, envSet.getMenuNm()).trim();
-
-                int conMargin = calcPercent(menuSale, aveSale, menuSaleMax, menuSaleMin);
-                int popularity = calcPercent(saleQuantity, aveCnt, menuCntMax, menuCntMin);
-
-                String menuEngineCd=generateCd(conMargin, popularity);
-
-                reqParam.put("userId", userId);
-                reqParam.put("saleYm", param.getSaleYm());
-                reqParam.put("catId", catId);
-                reqParam.put("menuId", menuId);
-                reqParam.put("saleQuantity", saleQuantity);
-                reqParam.put("menuCost", menuCost);
-                reqParam.put("menuNm", menuNm);
-                reqParam.put("popularity", popularity);
-                reqParam.put("contributionMargin", conMargin);
-                reqParam.put("menuEngineCd", menuEngineCd);
-                commonDao.insert("engine.insertMenu", reqParam);
-                reqParam.clear();
-            }
-
-            row++;
-
+        }catch (Exception e){
+            throw new EngineException(e.getMessage());
+        }finally {//파싱 후 바로 엑셀 삭제
+            parserUtil.close();
+            df.delete();
         }
+
     }
     private HashMap<String, Integer> getMenuSizeMinMax(int row, ExcelParserUtil util){
         HashMap<String, Integer> ret = new HashMap<>();
@@ -204,10 +235,12 @@ public class EngineServiceImpl implements EngineService{
                 break;
             int sale = (int) Double.parseDouble(util.getCellData(row, envSet.getSale()));
             int cnt = (int) Double.parseDouble(util.getCellData(row,envSet.getCnt()));
+            int cost = (int) Double.parseDouble(util.getCellData(row, envSet.getMenuCost()));
+            if(cost==0) continue;
             if(cnt >= maxCnt) maxCnt = cnt;
             if(cnt <= minCnt) minCnt = cnt;
             if(sale >= maxSale) maxSale = sale;
-            if(cnt <= minSale) minSale = sale;
+            if(sale <= minSale) minSale = sale;
             size++;
         }
         ret.put("size", size);
