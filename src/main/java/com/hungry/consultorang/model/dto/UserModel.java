@@ -17,9 +17,7 @@ public class UserModel extends ParentModel {
     String email;
     String pw;
     String businessName;
-    String businessNum;
     String phone;
-    String businessCd;
     String serviceYn;
     Date regDt;
 }

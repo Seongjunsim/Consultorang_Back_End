@@ -6,18 +6,37 @@
     <insert id="insertUser">
         <![CDATA[
             INSERT INTO USER
-            (email, pw, phone, business_num, business_cd, business_name,service_yn, reg_dt)
+            (email, pw, phone, service_yn, reg_dt)
             VALUE(
                 #{email},
                 #{pw},
                 #{phone},
-                #{businessNum},
-                #{businessCd},
-                #{businessName},
                 #{serviceYn},
                 NOW()
             )
         ]]>
+    </insert>
+
+    <insert id="insertBusiness">
+        <![CDATA[
+        INSERT INTO BUSINESS
+            (user_id, business_num, business_name, business_type, business_ingre,
+            business_cookway, business_alcohol, business_already, business_staff, business_hours,
+            reg_dt)
+            VALUE(
+                #{userId},
+                #{businessNum},
+                #{businessName},
+                #{businessType},
+                #{businessIngre},
+                #{businessCookway},
+                #{businessAlcohol},
+                #{businessAlready},
+                #{businessStaff},
+                #{businessHours},
+                NOW()
+            )
+            ]]>
     </insert>
 
     <select id="getUser" resultType="UserModel">
@@ -25,6 +44,15 @@
             SELECT * FROM USER
             WHERE email=#{email}
         ]]>
+    </select>
+
+    <select id="getUserId" resultType="int">
+        <![CDATA[
+            SELECT user_id FROM USER
+            WHERE email=#{email}
+        ]]>
+
+
     </select>
 
     <select id="checkEmail" resultType="int">
@@ -35,4 +63,6 @@
             WHERE email=#{email}
         ]]>
     </select>
+
+
 </mapper>

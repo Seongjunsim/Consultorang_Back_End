@@ -4,11 +4,9 @@ import com.hungry.consultorang.common.dao.CommonDao;
 import com.hungry.consultorang.common.exception.LoginException;
 import com.hungry.consultorang.common.provider.JwtTokenProvider;
 import com.hungry.consultorang.model.dto.UserModel;
-import com.hungry.consultorang.model.login.SignInRequestModel;
-import com.hungry.consultorang.model.login.SignInResponseModel;
-import com.hungry.consultorang.model.login.SignUpRequestModel;
-import com.hungry.consultorang.model.login.SignUpResponseModel;
+import com.hungry.consultorang.model.login.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 
@@ -42,15 +40,23 @@ public class LoginServiceImpl implements LoginService{
         return ret;
     }
 
+    //오 진짜 ㅅ신기 이렇게 하면 롤백될때 특정 예외로 뱉음
+    @Transactional(rollbackFor = LoginException.class)
+    //batch 는 중간 저장 아예 다 롤백아니고 끊어서
     @Override
     public SignUpResponseModel signUp(SignUpRequestModel param) throws Exception {
         commonDao.insert("login.insertUser", param);
+        int userId = (int) commonDao.selectOne("login.getUserId", param);
+        param.setUserId(userId);
+        commonDao.insert("login.insertBusiness", param);
+
         SignUpResponseModel ret = SignUpResponseModel.builder()
             .businessName(param.getBusinessName())
             .pw(param.getPw())
             .email(param.getEmail()).build();
         return ret;
     }
+
 
     @Override
     public HashMap<String, Object> checkEmail(HashMap<String, String> param) throws Exception {

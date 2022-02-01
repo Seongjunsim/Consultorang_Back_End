@@ -9,7 +9,8 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class SignUpResponseModel extends ParentModel {
-    private String businessName;
-    private String email;
-    private String pw;
+    int userId;
+    String email;
+    String businessName;
+    String pw;
 }
