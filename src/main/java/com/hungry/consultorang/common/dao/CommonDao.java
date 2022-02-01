@@ -16,31 +16,27 @@ public class CommonDao {
         this.sqlSession = sqlSession;
     }
 
-    public List<HashMap<String, Object>> getUser(){
-        return sqlSession.selectList("common.getUserList");
-    }
-
-    public Object selectOne(String statement, ParentModel param){
+    public Object selectOne(String statement, Object param){
         return sqlSession.selectOne(statement, param);
     }
 
-    public List<ParentModel> selectList(String statement){
+    public List<Object> selectList(String statement){
         return sqlSession.selectList(statement);
     }
 
-    public List<ParentModel> selectList(String statement, ParentModel param){
+    public List<Object> selectList(String statement, Object param){
         return sqlSession.selectList(statement, param);
     }
 
-    public int update(String statement, ParentModel param){
+    public int update(String statement, Object param){
         return sqlSession.update(statement, param);
     }
 
-    public int insert(String statement, ParentModel param){
+    public int insert(String statement, Object param){
         return sqlSession.insert(statement, param);
     }
 
-    public int delete(String statement, ParentModel param){
+    public int delete(String statement, Object param){
         return sqlSession.delete(statement, param);
     }
 

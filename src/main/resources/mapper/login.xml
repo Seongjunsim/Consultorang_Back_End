@@ -1,0 +1,68 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="login">
+
+    <insert id="insertUser">
+        <![CDATA[
+            INSERT INTO USER
+            (email, pw, phone, service_yn, reg_dt)
+            VALUE(
+                #{email},
+                #{pw},
+                #{phone},
+                #{serviceYn},
+                NOW()
+            )
+        ]]>
+    </insert>
+
+    <insert id="insertBusiness">
+        <![CDATA[
+        INSERT INTO BUSINESS
+            (user_id, business_num, business_name, business_type, business_ingre,
+            business_cookway, business_alcohol, business_already, business_staff, business_hours,
+            reg_dt)
+            VALUE(
+                #{userId},
+                #{businessNum},
+                #{businessName},
+                #{businessType},
+                #{businessIngre},
+                #{businessCookway},
+                #{businessAlcohol},
+                #{businessAlready},
+                #{businessStaff},
+                #{businessHours},
+                NOW()
+            )
+            ]]>
+    </insert>
+
+    <select id="getUser" resultType="UserModel">
+        <![CDATA[
+            SELECT * FROM USER
+            WHERE email=#{email}
+        ]]>
+    </select>
+
+    <select id="getUserId" resultType="int">
+        <![CDATA[
+            SELECT user_id FROM USER
+            WHERE email=#{email}
+        ]]>
+
+
+    </select>
+
+    <select id="checkEmail" resultType="int">
+        <![CDATA[
+            SELECT
+                COUNT(0) CNT
+            FROM USER
+            WHERE email=#{email}
+        ]]>
+    </select>
+
+
+</mapper>
