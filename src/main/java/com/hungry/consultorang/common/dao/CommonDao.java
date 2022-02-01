@@ -28,15 +28,15 @@ public class CommonDao {
         return sqlSession.selectList(statement, param);
     }
 
-    public int update(String statement, ParentModel param){
+    public int update(String statement, Object param){
         return sqlSession.update(statement, param);
     }
 
-    public int insert(String statement, ParentModel param){
+    public int insert(String statement, Object param){
         return sqlSession.insert(statement, param);
     }
 
-    public int delete(String statement, ParentModel param){
+    public int delete(String statement, Object param){
         return sqlSession.delete(statement, param);
     }
 

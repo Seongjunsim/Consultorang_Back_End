@@ -1,0 +1,87 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="engine">
+
+
+    <select id="getCatMenuSize" resultType="int">
+        <![CDATA[
+            SELECT
+            	COUNT(*) AS size
+            FROM SALES A
+            INNER JOIN MENUS B
+                ON A.menu_id = B.menu_id
+            WHERE A.user_id = #{userId}
+                AND A.sale_ym = #{saleYm}
+                AND A.cat_id = #{catId}
+            ORDER BY B.menu_cost DESC
+        ]]>
+    </select>
+
+    <select id="getCatMenu" resultType="CatMenuModel">
+        <![CDATA[
+            SELECT
+            	A.user_id,
+            	A.sale_ym,
+            	A.cat_id,
+            	A.menu_id,
+            	A.sale_quantity,
+            	B.menu_cost,
+            	B.menu_nm
+            FROM SALES A
+            INNER JOIN MENUS B
+                ON A.menu_id = B.menu_id
+            WHERE A.user_id = #{userId}
+                AND A.sale_ym = #{saleYm}
+                AND A.cat_id = #{catId}
+            ORDER BY B.menu_cost DESC
+            LIMIT #{size}
+        ]]>
+    </select>
+
+    <select id="getCatName" resultType="String">
+        <![CDATA[
+            SELECT
+                cat_nm
+            FROM CATEGORY
+            WHERE cat_id = #{catId}
+        ]]>
+    </select>
+
+    <insert id="insertCat">
+        <![CDATA[
+            INSERT INTO CATEGORY
+            (cat_id, user_id, cat_nm, sale_ym, reg_dt)
+            VALUES
+            (#{catId},#{userId},#{catNm},#{saleYm},NOW())
+        ]]>
+    </insert>
+
+    <insert id="insertMenu">
+        <![CDATA[
+            INSERT INTO SALES
+            (user_id, sale_ym, cat_id, menu_id,
+             sale_quantity, menu_cost, menu_nm, popularity,
+             contribution_margin, menu_engine_cd, reg_dt)
+            VALUES
+            (#{userId}, #{saleYm}, #{catId}, #{menuId},
+             #{saleQuantity}, #{menuCost}, #{menuNm},
+             #{popularity}, #{contributionMargin}, #{menuEngineCd}, NOW())
+        ]]>
+    </insert>
+
+    <select id="getMenuSize" resultType="int">
+        <![CDATA[
+            SELECT
+                COUNT(*)
+            FROM SALES
+            WHERE 1=1
+        ]]>
+        <if test="userId != null and userId != ''">
+            AND user_id = #{userId}
+        </if>
+        <if test="saleYm != null and saleYm != ''">
+            AND sale_ym = #{saleYm}
+        </if>
+    </select>
+</mapper>

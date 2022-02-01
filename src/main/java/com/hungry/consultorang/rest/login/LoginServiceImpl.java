@@ -59,6 +59,7 @@ public class LoginServiceImpl implements LoginService{
 
 
     @Override
+    @Transactional(rollbackFor = LoginException.class)
     public HashMap<String, Object> checkEmail(HashMap<String, String> param) throws Exception {
         HashMap<String, Object> ret = new HashMap<>();
         int cnt = (int) commonDao.selectOne("login.checkEmail", param);

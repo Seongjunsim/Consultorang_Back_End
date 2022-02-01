@@ -12,4 +12,13 @@ import org.springframework.stereotype.Component;
 public class EnvSet {
     String secretKey;
     long expireLength;
+    int excelSheetNum;
+    String category;
+    int cnt;
+    int cntPercent;
+    int sale;
+    int salePercent;
+    int menuCost;
+    int menuNm;
+    String excelPath;
 }
