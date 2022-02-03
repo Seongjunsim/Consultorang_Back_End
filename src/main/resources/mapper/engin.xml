@@ -85,13 +85,11 @@
         </if>
     </select>
 
-    <select id="getCatList" resultType="ParsingExcelFileResponseModel">
+    <select id="getCatList" resultType="HashMap">
         <![CDATA[
             SELECT
-                cat_id,
-                user_id,
-                sale_ym,
-                cat_nm
+                cat_id AS catId,
+                cat_nm AS catNm
             FROM CATEGORY
             WHERE 1=1
         ]]>

@@ -1,14 +1,17 @@
 package com.hungry.consultorang.model.engine;
 
 import com.hungry.consultorang.model.ParentModel;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
 @Data
+@Builder
 @EqualsAndHashCode
 public class ParsingExcelFileResponseModel extends ParentModel {
-    int catId;
     int userId;
     String saleYm;
-    String catNm;
+    List<Object> menuList;
 }

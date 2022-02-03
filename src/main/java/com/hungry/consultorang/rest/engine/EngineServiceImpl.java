@@ -103,7 +103,7 @@ public class EngineServiceImpl implements EngineService{
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public List<Object> parsingExcelFile(ParsingExcelFileModel param) throws Exception {
+    public ParsingExcelFileResponseModel parsingExcelFile(ParsingExcelFileModel param) throws Exception {
 
         int userId = param.getUserId();
 
@@ -220,7 +220,14 @@ public class EngineServiceImpl implements EngineService{
         }
         reqParam.put("saleYm", param.getSaleYm());
         reqParam.put("userId", param.getUserId());
-        return commonDao.selectList("engine.getCatList", reqParam);
+
+        List<Object> list = commonDao.selectList("engine.getCatList", reqParam);
+        ParsingExcelFileResponseModel retModel = ParsingExcelFileResponseModel.builder()
+            .userId(userId)
+            .saleYm(param.getSaleYm())
+            .menuList(list)
+            .build();
+        return retModel;
     }
     private HashMap<String, Integer> getMenuSizeMinMax(int row, ExcelParserUtil util){
         HashMap<String, Integer> ret = new HashMap<>();
