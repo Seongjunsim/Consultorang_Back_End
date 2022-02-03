@@ -84,4 +84,25 @@
             AND sale_ym = #{saleYm}
         </if>
     </select>
+
+    <select id="getCatList" resultType="ParsingExcelFileResponseModel">
+        <![CDATA[
+            SELECT
+                cat_id,
+                user_id,
+                sale_ym,
+                cat_nm
+            FROM CATEGORY
+            WHERE 1=1
+        ]]>
+        <if test="catId != null and catId != ''">
+            AND cat_id = #{catId}
+        </if>
+        <if test="saleYm != null and saleYm != ''">
+            AND sale_ym = #{saleYm}
+        </if>
+        <if test="userId != null and userId != ''">
+            AND user_id = #{userId}
+        </if>
+    </select>
 </mapper>

@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 
 @Controller
 @RequestMapping(value="/engine")
@@ -44,9 +45,9 @@ public class EngineController {
         @ModelAttribute ParsingExcelFileModel param)
         throws Exception{
         RestResponse res = new RestResponse();
-        engineService.parsingExcelFile(param);
+        List<Object> ret = engineService.parsingExcelFile(param);
 
-        return new ResponseEntity<RestResponse>(res.setSuccess(), HttpStatus.OK);
+        return new ResponseEntity<RestResponse>(res.setSuccess(ret), HttpStatus.OK);
     }
 
 

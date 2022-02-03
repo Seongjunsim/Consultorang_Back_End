@@ -5,10 +5,7 @@ import com.hungry.consultorang.common.exception.EngineException;
 import com.hungry.consultorang.common.util.ExcelParserUtil;
 import com.hungry.consultorang.config.EnvSet;
 import com.hungry.consultorang.model.dto.CatMenuModel;
-import com.hungry.consultorang.model.engine.CatEngineRequestModel;
-import com.hungry.consultorang.model.engine.CatEngineResponseModel;
-import com.hungry.consultorang.model.engine.MenuModel;
-import com.hungry.consultorang.model.engine.ParsingExcelFileModel;
+import com.hungry.consultorang.model.engine.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -106,7 +103,7 @@ public class EngineServiceImpl implements EngineService{
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void parsingExcelFile(ParsingExcelFileModel param) throws Exception {
+    public List<Object> parsingExcelFile(ParsingExcelFileModel param) throws Exception {
 
         int userId = param.getUserId();
 
@@ -221,7 +218,9 @@ public class EngineServiceImpl implements EngineService{
             parserUtil.close();
             df.delete();
         }
-
+        reqParam.put("saleYm", param.getSaleYm());
+        reqParam.put("userId", param.getUserId());
+        return commonDao.selectList("engine.getCatList", reqParam);
     }
     private HashMap<String, Integer> getMenuSizeMinMax(int row, ExcelParserUtil util){
         HashMap<String, Integer> ret = new HashMap<>();

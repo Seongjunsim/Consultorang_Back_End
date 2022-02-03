@@ -1,0 +1,178 @@
+{
+	"info": {
+		"_postman_id": "dd3f8a57-fc29-4ea8-91a6-93a0601417d0",
+		"name": "Consultorang",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "engine",
+			"item": [
+				{
+					"name": "카테고리엔진데이터",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"catId\":0,\r\n    \"userId\":6,\r\n    \"saleYm\":\"202201\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/engine/getCatEngine",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"engine",
+								"getCatEngine"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "엑셀 파싱",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "multipartFile",
+									"type": "file",
+									"src": "/C:/Users/USER/Documents/test.xlsx"
+								},
+								{
+									"key": "userId",
+									"value": "29",
+									"type": "text"
+								},
+								{
+									"key": "saleYm",
+									"value": "202202",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/engine/insertExcel",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"engine",
+								"insertExcel"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "login",
+			"item": [
+				{
+					"name": "회원가입",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"businessName\":\"한잔어때\",\r\n    \"email\":\"sjsim@naber.com\",\r\n    \"pw\":\"ss12345678!\",\r\n    \"phone\":\"010-2030-3030\",\r\n    \"businessNum\":\"123123123\",\r\n    \"businessCd\" : \"BT001\",\r\n    \"serviceYn\" : \"Y\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/login/signup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"login",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "로그인",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"sjsim@naber.com\",\r\n    \"pw\":\"ss12345678!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/login/signin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"login",
+								"signin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "이메일중복체크",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"sjsim@naber.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/login/checkEmail",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"login",
+								"checkEmail"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
