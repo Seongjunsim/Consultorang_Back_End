@@ -5,10 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
-public class CatEngineRequestModel extends ParentModel {
-    int userId;
-    int catId;
-    String saleYm;
-    int size;
+@EqualsAndHashCode
+public class CatEngineTotalModel extends ParentModel {
+    int totalCnt;
+    int totalSale;
 }

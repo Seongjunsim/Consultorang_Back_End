@@ -5,6 +5,7 @@ import com.hungry.consultorang.common.exception.EngineException;
 import com.hungry.consultorang.common.util.ExcelParserUtil;
 import com.hungry.consultorang.config.EnvSet;
 import com.hungry.consultorang.model.dto.CatMenuModel;
+import com.hungry.consultorang.model.dto.MenuModel;
 import com.hungry.consultorang.model.engine.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,74 +32,40 @@ public class EngineServiceImpl implements EngineService{
     public CatEngineResponseModel getCatEngine(CatEngineRequestModel param)
         throws Exception {
 
-        int size = (int)commonDao.selectOne("engine.getCatMenuSize", param);
-        String catNm = (String) commonDao.selectOne("engine.getCatName", param);
-        size = size - (size/5);
-        HashMap<String, Object> reqMap = new HashMap<>();
-        reqMap.put("size", size);
-        reqMap.put("userId", param.getUserId());
-        reqMap.put("saleYm", param.getSaleYm());
-        reqMap.put("catId", param.getCatId());
-        List<Object> menuLists =
-             commonDao.selectList("engine.getCatMenu", reqMap);
+        int size = (int) commonDao.selectOne("engine.getMenuSize", param);
+        size = size-(Math.round((float)size/5));
+        param.setSize(size);
 
-        int totalSale = 0;
-        int totalCnt = 0;
-        int maxSale=0; int minSale=Integer.MAX_VALUE;
-        int maxCnt=0; int minCnt = Integer.MAX_VALUE;
+        CatEngineTotalModel total = (CatEngineTotalModel) commonDao.selectOne("engine.getCatTotal", param);
 
-        //평균과 그에 해당하는 좌표 찍어내기 위한 변수 생성
-        for(Object o : menuLists){
-            CatMenuModel cmm = (CatMenuModel) o;
-            int sale = cmm.getMenuCost()*cmm.getSaleQuantity();
-            int cnt = cmm.getSaleQuantity();
-            totalSale+=sale;
-            totalCnt+=cnt;
-            if(sale > maxSale) maxSale=sale;
-            if(sale < minSale) minSale=sale;
-            if(cnt > maxCnt) maxCnt=cnt;
-            if(cnt < minCnt) minCnt=cnt;
+        List<MenuModel> first = new LinkedList<>();
+        List<MenuModel> second = new LinkedList<>();
+        List<MenuModel> thrid = new LinkedList<>();
+
+        List<Object> list = commonDao.selectList("engine.getCatMenu", param);
+
+        for(Object o : list){
+            MenuModel m = (MenuModel) o;
+            switch (m.getMenuEngineCd()){
+                case "ME001":
+                    first.add(m);
+                    break;
+                case "ME003":
+                    second.add(m);
+                    break;
+                case "ME004":
+                    thrid.add(m);
+                    break;
+            }
         }
+        CatEngineResponseModel retModel = CatEngineResponseModel.builder()
+            .totalCnt(total.getTotalCnt())
+            .totalSale(total.getTotalSale())
+            .first(first)
+            .second(second)
+            .third(thrid).build();
 
-        float aveSale = totalSale/menuLists.size();
-        float aveCnt = totalCnt/menuLists.size();
-
-        List<MenuModel> menuModels = new LinkedList<>();
-
-        for(Object o : menuLists){
-            CatMenuModel cmm = (CatMenuModel) o;
-
-            float sale = cmm.getMenuCost()*cmm.getSaleQuantity();
-            float cnt = cmm.getSaleQuantity();
-
-            float left=  sale>aveSale?maxSale:aveSale;
-            float right= sale>aveSale?aveSale:minSale;
-            float valuePercent = ((sale-right)/((left-right)*2))*100f;
-            if(sale>aveSale) valuePercent+=50f;
-
-            left=  cnt>aveCnt?maxCnt:aveCnt;
-            right= cnt>aveCnt?aveCnt:minCnt;
-            float popularPercent = ((cnt-right)/((left-right)*2))*100f;
-            if(cnt>aveCnt) popularPercent+=50f;
-
-            MenuModel mm = MenuModel.builder()
-                .menuId(cmm.getMenuId())
-                .menuCost(cmm.getMenuCost())
-                .menuNm(cmm.getMenuNm())
-                .menuSaleCnt(cmm.getSaleQuantity())
-                .popularPercent(Math.round(popularPercent))
-                .valuePercent(Math.round(valuePercent)).build();
-            menuModels.add(mm);
-        }
-
-        CatEngineResponseModel cerm = CatEngineResponseModel.builder()
-            .catId(param.getCatId())
-            .catNm(catNm)
-            .catSales(totalSale)
-            .catSaleCnt(totalCnt)
-            .menuList(menuModels).build();
-
-        return cerm;
+       return retModel;
     }
 
     @Transactional(rollbackFor = Exception.class)

@@ -18,23 +18,22 @@
         ]]>
     </select>
 
-    <select id="getCatMenu" resultType="CatMenuModel">
+    <select id="getCatMenu" resultType="MenuModel">
         <![CDATA[
             SELECT
-            	A.user_id,
-            	A.sale_ym,
-            	A.cat_id,
             	A.menu_id,
+            	A.menu_nm,
             	A.sale_quantity,
-            	B.menu_cost,
-            	B.menu_nm
+            	A.menu_cost,
+            	A.sale_quantity*A.menu_cost,
+            	A.popularity,
+            	A.contribution_margin,
+            	A.menu_engine_cd
             FROM SALES A
-            INNER JOIN MENUS B
-                ON A.menu_id = B.menu_id
             WHERE A.user_id = #{userId}
                 AND A.sale_ym = #{saleYm}
                 AND A.cat_id = #{catId}
-            ORDER BY B.menu_cost DESC
+            ORDER BY A.menu_cost DESC
             LIMIT #{size}
         ]]>
     </select>
@@ -83,6 +82,9 @@
         <if test="saleYm != null and saleYm != ''">
             AND sale_ym = #{saleYm}
         </if>
+        <if test="catId != null and catId != ''">
+            AND cat_id = #{catId}
+        </if>
     </select>
 
     <select id="getCatList" resultType="HashMap">
@@ -102,5 +104,42 @@
         <if test="userId != null and userId != ''">
             AND user_id = #{userId}
         </if>
+    </select>
+
+    <select id="getCatTotal" resultType="CatEngineTotalModel">
+        <![CDATA[
+            SELECT
+                SUM(A.sale_quantity) AS totalCnt, SUM(A.sale_quantity*A.menu_cost) AS totalSale
+            FROM
+            (
+                SELECT sale_quantity, menu_cost
+                FROM SALES
+                WHERE 1=1
+        ]]>
+        <if test="catId != null and catId != ''">
+            <![CDATA[
+                AND cat_id = #{catId}
+            ]]>
+        </if>
+        <if test="userId != null and userId != ''">
+            <![CDATA[
+                AND user_id = #{userId}
+            ]]>
+        </if>
+        <if test="saleYm != null and saleYm != ''">
+            <![CDATA[
+                AND sale_ym = #{saleYm}
+            ]]>
+        </if>
+        <if test="size != null and size != ''">
+            <![CDATA[
+                LIMIT #{size}
+            ]]>
+        </if>
+        <![CDATA[
+            ) A
+        ]]>
+
+
     </select>
 </mapper>

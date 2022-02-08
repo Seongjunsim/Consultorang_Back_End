@@ -51,22 +51,4 @@ public class EngineController {
         return new ResponseEntity<RestResponse>(res.setSuccess(ret), HttpStatus.OK);
     }
 
-
-    @PostMapping("/test")
-    public ResponseEntity<RestResponse> test(
-        @ModelAttribute ParsingExcelFileModel param) throws Exception{
-
-        String sourceFileNm = param.getMultipartFile().getOriginalFilename();
-
-        File df;
-        String dfnm;
-        // TODO: 2022-02-01 file util 에 현 시간 기준으로 파일 생성 ~~_
-
-        df = new File("C:/Users/USER/Desktop/test/"+sourceFileNm);
-        param.getMultipartFile().transferTo(df);
-
-        return null;
-    }
-
-
 }
