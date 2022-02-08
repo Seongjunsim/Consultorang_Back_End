@@ -12,10 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class EngineServiceImpl implements EngineService{
@@ -96,48 +93,37 @@ public class EngineServiceImpl implements EngineService{
 
         int catId = 0; int menuId = 0;
 
-        int row = 6; int totalCnt=0; int totalSale=0;
+        int row = 6;
 
-        int catCnt=0; int catSale=0;
+        double mm=0; double cm=0;
 
-        int aveCnt=0; int aveSale=0;
-
-        int menuSize=0; int menuSaleMax=0; int menuSaleMin=0; int menuCntMax=0; int menuCntMin=0;
+        int menuSize=0; double menuSaleMax=0; double menuSaleMin=0; double menuCntMax=0; double menuCntMin=0;
 
         String catNm="";
         HashMap<String, Object> reqParam = new HashMap<>();
         try{
             while(row<=rowSize){
-                int colSize = parserUtil.getColSize(row);
 
                 if(row==6) { // total sum
-                    totalCnt =
-                        (int)Double.parseDouble(parserUtil.getCellData(row, envSet.getCnt()));
-                    totalSale =
-                        (int)Double.parseDouble(parserUtil.getCellData(row, envSet.getSale()));
                     row++;
                     continue;
                 }
 
                 String temp = parserUtil.getCellData(row,0).trim();
-                String what = envSet.getCategory();
                 if(temp.contains(envSet.getCategory())){//카테고리
-                    catCnt =
-                        (int)Double.parseDouble(parserUtil.getCellData(row, envSet.getCnt()));
-                    catSale =
-                        (int)Double.parseDouble(parserUtil.getCellData(row, envSet.getSale()));
+
                     catNm =
                         temp.split(":")[1];
-                    HashMap<String, Integer> hm = getMenuSizeMinMax(row, parserUtil);
-                    menuSize=hm.get("size");
-                    menuSaleMax=hm.get("maxSale");
-                    menuSaleMin=hm.get("minSale");
-                    menuCntMax=hm.get("maxCnt");
-                    menuCntMin=hm.get("minCnt");
+                    HashMap<String, Double> hm = getMenuSizeMinMax(row, parserUtil);
+                    menuSize=(int)Math.round(hm.get("size"));
+                    menuSaleMax=(double)hm.get("maxSale");
+                    menuSaleMin=(double)hm.get("minSale");
+                    menuCntMax=(double)hm.get("maxCnt");
+                    menuCntMin=(double)hm.get("minCnt");
 
                     if(menuSize!=0){
-                        aveCnt = catCnt/menuSize;
-                        aveSale = catSale/menuSize;
+                        mm = 1d / (menuSize - Math.round((double) menuSize/5)) * 0.5d;
+                        cm = getCm(row, menuSize, parserUtil);
 
                         reqParam.put("catId", ++catId);
                         reqParam.put("userId", userId);
@@ -153,13 +139,15 @@ public class EngineServiceImpl implements EngineService{
                         (int)Double.parseDouble(parserUtil.getCellData(row, envSet.getCnt()));
                     int menuCost =
                         (int)Double.parseDouble(parserUtil.getCellData(row,envSet.getMenuCost()));
-                    int menuSale =
-                        (int)Double.parseDouble(parserUtil.getCellData(row, envSet.getSale()));
                     String menuNm =
                         parserUtil.getCellData(row, envSet.getMenuNm()).trim();
+
+                    double salePercent = Double.parseDouble(parserUtil.getCellData(row, envSet.getSalePercent()));
+                    double cntPercent = Double.parseDouble(parserUtil.getCellData(row, envSet.getCntPercent()));
+
                     if(menuCost>0){
-                        int conMargin = calcPercent(menuSale, aveSale, menuSaleMax, menuSaleMin);
-                        int popularity = calcPercent(saleQuantity, aveCnt, menuCntMax, menuCntMin);
+                        int conMargin = calcPercent(salePercent, cm, menuSaleMax, menuSaleMin);
+                        int popularity = calcPercent(cntPercent, mm, menuCntMax, menuCntMin);
 
                         String menuEngineCd=generateCd(conMargin, popularity);
 
@@ -196,40 +184,62 @@ public class EngineServiceImpl implements EngineService{
             .build();
         return retModel;
     }
-    private HashMap<String, Integer> getMenuSizeMinMax(int row, ExcelParserUtil util){
-        HashMap<String, Integer> ret = new HashMap<>();
+    private HashMap<String, Double> getMenuSizeMinMax(int row, ExcelParserUtil util){
+        HashMap<String, Double> ret = new HashMap<>();
         int size=0;
-        int minSale = Integer.MAX_VALUE;
-        int minCnt = Integer.MAX_VALUE;
-        int maxSale = 0;
-        int maxCnt = 0;
+        double minSalePercent = 1d;
+        double minCntPercent = 1d;
+        double maxSalePercent = 0d;
+        double maxCntPercent = 0d;
         while(++row <= util.getRowSize()){
             if(util.getCellData(row,0)==null||util.getCellData(row,0).trim().contains(envSet.getCategory()))
                 break;
-            int sale = (int) Double.parseDouble(util.getCellData(row, envSet.getSale()));
-            int cnt = (int) Double.parseDouble(util.getCellData(row,envSet.getCnt()));
+            double salePercent = Double.parseDouble(util.getCellData(row, envSet.getSalePercent()));
+            double cntPercent = Double.parseDouble(util.getCellData(row,envSet.getCntPercent()));
             int cost = (int) Double.parseDouble(util.getCellData(row, envSet.getMenuCost()));
             if(cost==0) continue;
-            if(cnt >= maxCnt) maxCnt = cnt;
-            if(cnt <= minCnt) minCnt = cnt;
-            if(sale >= maxSale) maxSale = sale;
-            if(sale <= minSale) minSale = sale;
+            if(cntPercent >= maxCntPercent) maxCntPercent = cntPercent;
+            if(cntPercent <= minCntPercent) minCntPercent = cntPercent;
+            if(salePercent >= maxSalePercent) maxSalePercent = salePercent;
+            if(salePercent <= minSalePercent) minSalePercent = salePercent;
             size++;
         }
-        ret.put("size", size);
-        ret.put("maxCnt", maxCnt);
-        ret.put("minCnt", minCnt);
-        ret.put("maxSale", maxSale);
-        ret.put("minSale", minSale);
+        ret.put("size", (double)size);
+        ret.put("maxCnt", maxCntPercent);
+        ret.put("minCnt", minCntPercent);
+        ret.put("maxSale", maxSalePercent);
+        ret.put("minSale", minSalePercent);
         return ret;
     }
 
-    private int calcPercent(int num, int ave, int maxNum, int minNum){
+    private double getCm(int row, int size, ExcelParserUtil util){
+        int abandonSize = Math.round((float)size / 5f);
+        PriorityQueue<CmPair> pq = new PriorityQueue<>();
+        double catSalePercent = Double.parseDouble(util.getCellData(row, envSet.getSalePercent()));
+        while(++row <= util.getRowSize()){
+            if(util.getCellData(row,0)==null||util.getCellData(row,0).trim().contains(envSet.getCategory()))
+                break;
+            int cost = (int) Double.parseDouble(util.getCellData(row, envSet.getMenuCost()));
+            double salePercent = Double.parseDouble(util.getCellData(row,envSet.getSalePercent()));
+            if(pq.size()<abandonSize)
+                pq.add(new CmPair(salePercent, cost));
+            else{
+                if(!pq.isEmpty() && pq.peek().cost < cost) continue;
+                pq.poll();
+                pq.add(new CmPair(salePercent, cost));
+            }
+        }
+        while(!pq.isEmpty()) catSalePercent -= pq.poll().salePercent;
+
+        return catSalePercent / (size-abandonSize);
+    }
+
+    private int calcPercent(double num, double ave, double maxNum, double minNum){
         int ret=0;
 
-        float left=  num>ave?maxNum:ave;
-        float right= num>ave?ave:minNum;
-        float valuePercent = ((num-right)/((left-right)*2))*100f;
+        double left=  num>ave?maxNum:ave;
+        double right= num>ave?ave:minNum;
+        double valuePercent = ((num-right)/((left-right)*2))*100f;
         if(num>ave) valuePercent+=50f;
         ret = (int)valuePercent;
 
@@ -242,4 +252,21 @@ public class EngineServiceImpl implements EngineService{
         else if(saleP >=50 && cntP < 50) return "ME002";
         else return "ME004";
     }
+
+
+    private class CmPair implements Comparable<CmPair>{
+        public double salePercent;
+        public int cost;
+
+        public CmPair(double salePercent, int cost) {
+            this.salePercent = salePercent;
+            this.cost = cost;
+        }
+
+        @Override
+        public int compareTo(CmPair o) {
+            return this.cost <= o.cost ? 1 : -1 ;
+        }
+    }
+
 }
