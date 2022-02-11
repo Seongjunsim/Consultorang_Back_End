@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class ParsingExcelFileModel extends ParentModel {
     String saleYm;
     int userId;
+    int catId;
     String fileNm;
     MultipartFile multipartFile;
 }
