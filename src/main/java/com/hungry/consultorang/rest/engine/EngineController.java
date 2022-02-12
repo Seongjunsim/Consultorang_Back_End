@@ -1,10 +1,7 @@
 package com.hungry.consultorang.rest.engine;
 
 import com.hungry.consultorang.common.response.RestResponse;
-import com.hungry.consultorang.model.engine.CatEngineRequestModel;
-import com.hungry.consultorang.model.engine.CatEngineResponseModel;
-import com.hungry.consultorang.model.engine.ParsingExcelFileModel;
-import com.hungry.consultorang.model.engine.ParsingExcelFileResponseModel;
+import com.hungry.consultorang.model.engine.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.*;
@@ -49,6 +46,15 @@ public class EngineController {
         ParsingExcelFileResponseModel ret = engineService.parsingExcelFile(param);
 
         return new ResponseEntity<RestResponse>(res.setSuccess(ret), HttpStatus.OK);
+    }
+
+    @PostMapping("/getCatList")
+    public ResponseEntity<RestResponse> getCatList(@RequestBody HashMap<String, Object> param) throws Exception{
+        RestResponse res = new RestResponse();
+
+        List<Object> data = engineService.getCatList(param);
+
+        return new ResponseEntity<RestResponse>(res.setSuccess(data), HttpStatus.OK);
     }
 
 }
