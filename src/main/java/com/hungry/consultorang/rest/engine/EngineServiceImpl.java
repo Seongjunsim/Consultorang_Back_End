@@ -113,7 +113,7 @@ public class EngineServiceImpl implements EngineService{
                 if(temp.contains(envSet.getCategory())){//카테고리
 
                     catNm =
-                        temp.split(":")[1];
+                        temp.split(":")[1].trim();
                     HashMap<String, Double> hm = getMenuSizeMinMax(row, parserUtil);
                     menuSize=(int)Math.round(hm.get("size"));
                     menuSaleMax=(double)hm.get("maxSale");
@@ -269,4 +269,8 @@ public class EngineServiceImpl implements EngineService{
         }
     }
 
+    @Override
+    public List<Object> getCatList(HashMap<String, Object> param) throws Exception {
+        return commonDao.selectList("engine.getCatList", param);
+    }
 }
