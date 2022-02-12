@@ -79,6 +79,35 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "카테고리 리스트",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\" : 27,\r\n    \"saleYm\" : \"202202\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/engine/getCatList",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"engine",
+								"getCatList"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

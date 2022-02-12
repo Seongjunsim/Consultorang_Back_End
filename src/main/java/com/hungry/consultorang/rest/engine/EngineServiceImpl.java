@@ -47,6 +47,7 @@ public class EngineServiceImpl implements EngineService{
                 case "ME001":
                     first.add(m);
                     break;
+                case "ME002":
                 case "ME003":
                     second.add(m);
                     break;
