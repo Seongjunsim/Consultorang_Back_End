@@ -4,8 +4,10 @@ import com.hungry.consultorang.common.dao.CommonDao;
 import com.hungry.consultorang.common.exception.EngineException;
 import com.hungry.consultorang.common.util.ExcelParserUtil;
 import com.hungry.consultorang.config.EnvSet;
+import com.hungry.consultorang.model.account.CatTypeModel;
 import com.hungry.consultorang.model.account.ParsingExcelFileModel;
 import com.hungry.consultorang.model.account.ParsingExcelFileResponseModel;
+import com.hungry.consultorang.model.account.UpdateCatTypeRequestModel;
 import com.hungry.consultorang.rest.engine.EngineServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,19 @@ public class AccountServiceImpl implements AccountService{
     public AccountServiceImpl(CommonDao commonDao, EnvSet envSet) {
         this.commonDao = commonDao;
         this.envSet = envSet;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void updateCatType(UpdateCatTypeRequestModel param) throws Exception {
+        HashMap<String, Object> req = new HashMap<>();
+        req.put("userId", param.getUserId());
+        req.put("saleYm", param.getSaleYm());
+        for(CatTypeModel ctm : param.getCatList()){
+            req.put("catId", ctm.getCatId());
+            req.put("catType", ctm.getCatType());
+            commonDao.update("account.updateCatType", req);
+        }
     }
 
     @Transactional(rollbackFor = Exception.class)
