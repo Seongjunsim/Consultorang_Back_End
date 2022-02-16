@@ -1,5 +1,7 @@
 package com.hungry.consultorang.rest.engine;
 
+import com.hungry.consultorang.model.account.ParsingExcelFileModel;
+import com.hungry.consultorang.model.account.ParsingExcelFileResponseModel;
 import com.hungry.consultorang.model.engine.*;
 
 import java.util.HashMap;
@@ -9,8 +11,6 @@ public interface EngineService {
     public CatEngineResponseModel getCatEngine(CatEngineRequestModel param)
         throws Exception;
 
-    public ParsingExcelFileResponseModel parsingExcelFile(ParsingExcelFileModel param)
-        throws Exception;
 
     public List<Object> getCatList(HashMap<String,Object> param)
         throws Exception;
