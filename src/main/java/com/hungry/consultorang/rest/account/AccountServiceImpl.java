@@ -4,20 +4,15 @@ import com.hungry.consultorang.common.dao.CommonDao;
 import com.hungry.consultorang.common.exception.EngineException;
 import com.hungry.consultorang.common.util.ExcelParserUtil;
 import com.hungry.consultorang.config.EnvSet;
-import com.hungry.consultorang.model.account.CatTypeModel;
-import com.hungry.consultorang.model.account.ParsingExcelFileModel;
-import com.hungry.consultorang.model.account.ParsingExcelFileResponseModel;
-import com.hungry.consultorang.model.account.UpdateCatTypeRequestModel;
+import com.hungry.consultorang.model.ParentModel;
+import com.hungry.consultorang.model.account.*;
 import com.hungry.consultorang.rest.engine.EngineServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 @Service
 public class AccountServiceImpl implements AccountService{
@@ -244,5 +239,21 @@ public class AccountServiceImpl implements AccountService{
         public int compareTo(CmPair o) {
             return this.cost <= o.cost ? 1 : -1 ;
         }
+    }
+
+    @Override
+    public List<GetCatMenuListResponseModel> getCatMenuList(GetCatMenuListRequestModel param) throws Exception {
+        List<Object> catList =  commonDao.selectList("account.getCatList", param);
+        List<GetCatMenuListResponseModel> ret = new LinkedList<>();
+        for(Object cat : catList){
+            HashMap<String, Object> c = (HashMap<String, Object>) cat;
+            List<ParentModel> menuList = commonDao.selectModelList("getMenuList", c);
+            GetCatMenuListResponseModel model = GetCatMenuListResponseModel.builder()
+                .catId((int)c.get("catId"))
+                .catNm((String)c.get("catNm"))
+                .menuList(menuList).build();
+            ret.add(model);
+        }
+        return ret;
     }
 }

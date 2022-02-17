@@ -1,9 +1,8 @@
 package com.hungry.consultorang.rest.account;
 
 import com.hungry.consultorang.common.response.RestResponse;
-import com.hungry.consultorang.model.account.ParsingExcelFileModel;
-import com.hungry.consultorang.model.account.ParsingExcelFileResponseModel;
-import com.hungry.consultorang.model.account.UpdateCatTypeRequestModel;
+import com.hungry.consultorang.model.account.*;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -11,6 +10,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/account")
@@ -38,6 +39,14 @@ public class AccountController {
         accountService.updateCatType(param);
         return new ResponseEntity<RestResponse>(res.setSuccess(), HttpStatus.OK);
 
+    }
+
+    @PostMapping("/getCatMenuList")
+    public ResponseEntity<RestResponse> getCatMenuList(@RequestBody GetCatMenuListRequestModel param)
+        throws Exception{
+        RestResponse res = new RestResponse();
+        List<GetCatMenuListResponseModel> data = accountService.getCatMenuList(param);
+        return new ResponseEntity<RestResponse>(res.setSuccess(data), HttpStatus.OK);
     }
 
 
