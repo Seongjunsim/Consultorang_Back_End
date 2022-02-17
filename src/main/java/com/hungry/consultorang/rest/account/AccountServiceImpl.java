@@ -256,4 +256,14 @@ public class AccountServiceImpl implements AccountService{
         }
         return ret;
     }
+
+    @Override
+    public AllCostResponseModel getAllCost(AllCostRequestModel param) throws Exception {
+        return null;
+    }
+
+    @Override
+    public InsertCostResponseModel insertCost(InsertCostRequestModel param) throws Exception {
+        return null;
+    }
 }

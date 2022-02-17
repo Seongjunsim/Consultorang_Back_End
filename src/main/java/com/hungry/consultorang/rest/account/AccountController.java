@@ -2,7 +2,6 @@ package com.hungry.consultorang.rest.account;
 
 import com.hungry.consultorang.common.response.RestResponse;
 import com.hungry.consultorang.model.account.*;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -49,5 +48,22 @@ public class AccountController {
         return new ResponseEntity<RestResponse>(res.setSuccess(data), HttpStatus.OK);
     }
 
+    @PostMapping("/allcost")
+    public ResponseEntity<RestResponse> getAllCost(@RequestBody AllCostRequestModel param) throws Exception{
+        RestResponse response = new RestResponse();
+
+        AllCostResponseModel resData = accountService.getAllCost(param);
+
+        return new ResponseEntity<RestResponse>(response.setSuccess(resData), HttpStatus.OK);
+    }
+
+    @PostMapping("/allcost")
+    public ResponseEntity<RestResponse> insertCost(@RequestBody InsertCostRequestModel param) throws Exception{
+        RestResponse response = new RestResponse();
+
+        InsertCostResponseModel resData = accountService.insertCost(param);
+
+        return new ResponseEntity<RestResponse>(response.setSuccess(resData), HttpStatus.OK);
+    }
 
 }

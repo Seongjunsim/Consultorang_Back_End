@@ -1,15 +1,16 @@
-package com.hungry.consultorang.model.cost;
+package com.hungry.consultorang.model.account;
 
-import lombok.Builder;
+import com.hungry.consultorang.model.ParentModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+
 @Data
 @EqualsAndHashCode(callSuper = false)
-@Builder
-public class InsertCostResponseModel {
+public class InsertCostRequestModel {
     int userId;
     String saleYm;
     String costType;
     int cost;
 }
+

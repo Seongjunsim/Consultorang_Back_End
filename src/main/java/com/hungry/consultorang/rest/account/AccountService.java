@@ -13,4 +13,9 @@ public interface AccountService {
 
     public List<GetCatMenuListResponseModel> getCatMenuList(GetCatMenuListRequestModel param)
         throws Exception;
+
+    public AllCostResponseModel getAllCost(AllCostRequestModel param)
+        throws Exception;
+    public InsertCostResponseModel insertCost(InsertCostRequestModel param)
+        throws Exception;
 }
