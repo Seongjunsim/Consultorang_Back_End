@@ -47,64 +47,8 @@
         ]]>
     </select>
 
-    <insert id="insertCat">
-        <![CDATA[
-            INSERT INTO CATEGORY
-            (cat_id, user_id, cat_nm, sale_ym, reg_dt)
-            VALUES
-            (#{catId},#{userId},#{catNm},#{saleYm},NOW())
-        ]]>
-    </insert>
 
-    <insert id="insertMenu">
-        <![CDATA[
-            INSERT INTO SALES
-            (user_id, sale_ym, cat_id, menu_id,
-             sale_quantity, menu_cost, menu_nm, popularity,
-             contribution_margin, menu_engine_cd, reg_dt)
-            VALUES
-            (#{userId}, #{saleYm}, #{catId}, #{menuId},
-             #{saleQuantity}, #{menuCost}, #{menuNm},
-             #{popularity}, #{contributionMargin}, #{menuEngineCd}, NOW())
-        ]]>
-    </insert>
 
-    <select id="getMenuSize" resultType="int">
-        <![CDATA[
-            SELECT
-                COUNT(*)
-            FROM SALES
-            WHERE 1=1
-        ]]>
-        <if test="userId != null and userId != ''">
-            AND user_id = #{userId}
-        </if>
-        <if test="saleYm != null and saleYm != ''">
-            AND sale_ym = #{saleYm}
-        </if>
-        <if test="catId != null and catId != ''">
-            AND cat_id = #{catId}
-        </if>
-    </select>
-
-    <select id="getCatList" resultType="HashMap">
-        <![CDATA[
-            SELECT
-                cat_id AS catId,
-                cat_nm AS catNm
-            FROM CATEGORY
-            WHERE 1=1
-        ]]>
-        <if test="catId != null and catId != ''">
-            AND cat_id = #{catId}
-        </if>
-        <if test="saleYm != null and saleYm != ''">
-            AND sale_ym = #{saleYm}
-        </if>
-        <if test="userId != null and userId != ''">
-            AND user_id = #{userId}
-        </if>
-    </select>
 
     <select id="getCatTotal" resultType="CatEngineTotalModel">
         <![CDATA[

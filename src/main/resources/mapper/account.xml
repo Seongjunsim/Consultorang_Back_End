@@ -57,4 +57,100 @@
         </if>
     </select>
 
+    <select id="getCatMaxId" resultType="int">
+        SELECT
+        ifnull(MAX(cat_id),0)+1 AS catId
+        FROM CATEGORY
+        WHERE user_id=#{userId}
+    </select>
+
+    <select id="getCatId" resultType="int">
+        SELECT
+        cat_id AS menuId
+        FROM CATEGORY
+        WHERE user_id=#{userId}
+        AND cat_nm=#{catNm}
+    </select>
+
+
+    <select id="getMenuMaxId" resultType="int">
+        SELECT
+            ifnull(MAX(menu_id),0)+1 AS menuId
+        FROM MENUS
+        WHERE user_id=#{userId}
+    </select>
+
+    <select id="getMenuId" resultType="int">
+        SELECT
+            menu_id AS menuId
+        FROM MENUS
+        WHERE user_id=#{userId}
+        AND menu_nm=#{menuNm}
+    </select>
+
+    <select id="getMenuSize" resultType="int">
+        <![CDATA[
+            SELECT
+                COUNT(*)
+            FROM SALES
+            WHERE 1=1
+        ]]>
+        <if test="userId != null and userId != ''">
+            AND user_id = #{userId}
+        </if>
+        <if test="saleYm != null and saleYm != ''">
+            AND sale_ym = #{saleYm}
+        </if>
+        <if test="catId != null and catId != ''">
+            AND cat_id = #{catId}
+        </if>
+    </select>
+
+    <insert id="insertCat">
+        <![CDATA[
+            INSERT INTO CATEGORY
+            (cat_id, user_id, cat_nm, reg_dt)
+            VALUES
+            (#{catId},#{userId},#{catNm},NOW())
+        ]]>
+    </insert>
+
+    <insert id="insertSale">
+        <![CDATA[
+            INSERT INTO SALES
+            (user_id, sale_ym, cat_id, menu_id,
+             sale_quantity, menu_cost, popularity,
+             contribution_margin, menu_engine_cd, reg_dt)
+            VALUES
+            (#{userId}, #{saleYm}, #{catId}, #{menuId},
+             #{saleQuantity}, #{menuCost},
+             #{popularity}, #{contributionMargin}, #{menuEngineCd}, NOW())
+        ]]>
+    </insert>
+
+    <insert id="insertMenu">
+        <![CDATA[
+            INSERT INTO MENUS
+            (user_id, menu_id, menu_nm, up_dt)
+            VALUES
+            (#{userId}, #{menuId}, #{menuNm}, NOW())
+        ]]>
+    </insert>
+
+    <select id="getUndefinedCatList" resultType="HashMap">
+        <![CDATA[
+            SELECT
+                cat_id AS catId,
+                cat_nm AS catNm
+            FROM CATEGORY
+            WHERE 1=1
+            AND type_cd IS NULL
+        ]]>
+        <if test="catId != null and catId != ''">
+            AND cat_id = #{catId}
+        </if>
+        <if test="userId != null and userId != ''">
+            AND user_id = #{userId}
+        </if>
+    </select>
 </mapper>
