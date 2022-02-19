@@ -57,7 +57,7 @@ public class AccountController {
         return new ResponseEntity<RestResponse>(response.setSuccess(resData), HttpStatus.OK);
     }
 
-    @PostMapping("/allcost")
+    @PostMapping("/all")
     public ResponseEntity<RestResponse> insertCost(@RequestBody InsertCostRequestModel param) throws Exception{
         RestResponse response = new RestResponse();
 
