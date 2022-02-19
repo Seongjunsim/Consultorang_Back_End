@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "dd3f8a57-fc29-4ea8-91a6-93a0601417d0",
+		"_postman_id": "350c23df-83aa-48c6-8d63-0a04cd20d31f",
 		"name": "Consultorang",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -32,49 +32,6 @@
 							"path": [
 								"engine",
 								"getCatEngine"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "엑셀 파싱",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "multipartFile",
-									"type": "file",
-									"src": "/C:/Users/USER/Documents/test.xlsx"
-								},
-								{
-									"key": "userId",
-									"value": "29",
-									"type": "text"
-								},
-								{
-									"key": "saleYm",
-									"value": "202202",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "http://127.0.0.1:8080/engine/insertExcel",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8080",
-							"path": [
-								"engine",
-								"insertExcel"
 							]
 						}
 					},
@@ -196,6 +153,83 @@
 							"path": [
 								"login",
 								"checkEmail"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "account",
+			"item": [
+				{
+					"name": "엑셀 파싱",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "multipartFile",
+									"type": "file",
+									"src": "/C:/Users/USER/Documents/test.xlsx"
+								},
+								{
+									"key": "userId",
+									"value": "29",
+									"type": "text"
+								},
+								{
+									"key": "saleYm",
+									"value": "202202",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/account/insertExcel",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"insertExcel"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "카테고리 타입 수정",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\":27,\r\n    \"saleYm\":\"202202\",\r\n    \"catList\":[\r\n        {\r\n            \"catId\":1,\r\n            \"catType\":\"MT001\"\r\n        },\r\n        {\r\n            \"catId\":2,\r\n            \"catType\":\"MT001\"\r\n        },\r\n        {\r\n            \"catId\":3,\r\n            \"catType\":\"MT001\"\r\n        },\r\n        {\r\n            \"catId\":4,\r\n            \"catType\":\"MT001\"\r\n        },\r\n        {\r\n            \"catId\":5,\r\n            \"catType\":\"MT001\"\r\n        },\r\n        {\r\n            \"catId\":6,\r\n            \"catType\":\"MT001\"\r\n        },\r\n        {\r\n            \"catId\":7,\r\n            \"catType\":\"MT001\"\r\n        },\r\n        {\r\n            \"catId\":8,\r\n            \"catType\":\"MT001\"\r\n        },\r\n        {\r\n            \"catId\":9,\r\n            \"catType\":\"MT001\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/account/updateCatType",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"updateCatType"
 							]
 						}
 					},

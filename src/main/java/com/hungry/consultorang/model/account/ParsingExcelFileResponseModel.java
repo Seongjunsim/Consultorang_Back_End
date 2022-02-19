@@ -1,4 +1,4 @@
-package com.hungry.consultorang.model.engine;
+package com.hungry.consultorang.model.account;
 
 import com.hungry.consultorang.model.ParentModel;
 import lombok.Builder;

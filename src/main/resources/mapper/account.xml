@@ -1,0 +1,60 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="account">
+
+
+    <update id="updateCatType">
+        <![CDATA[
+            UPDATE
+                CATEGORY
+            SET type_cd = #{catType}
+            WHERE 1=1
+                AND user_id = #{userId}
+                AND cat_id = #{catId}
+        ]]>
+    </update>
+
+    <select id="getCatList" resultType="HashMap">
+        <![CDATA[
+             SELECT
+                user_id AS userId,
+                sale_ym AS saleYm,
+	            cat_id AS catId,
+	            cat_nm AS catNm,
+	            type_cd AS typeCd
+            FROM CATEGORY
+            WHERE 1=1
+                AND user_id = #{userId}
+        ]]>
+        <if test="saleYm != null and saleYm != ''">
+                AND sale_ym = #{saleYm}
+        </if>
+        <if test="catType != null and catType !=''">
+                AND type_cd = #{catType}
+        </if>
+    </select>
+
+    <select id="getMenuList" resultType="AccountMenuModel">
+        <![CDATA[
+             SELECT
+	            A.menu_id,
+	            A.menu_nm,
+	            A.menu_cost,
+	            A.sale_quantity
+            FROM SALES A
+            WHERE 1=1
+	            AND A.user_id = #{userId}
+	    ]]>
+        <if test="saleYm != null and saleYm != ''">
+            AND A.sale_ym = #{saleYm}
+        </if>
+        <if test="catId != null and catId != ''">
+            AND A.cat_id = #{catId}
+        </if>
+        <if test="catType != null and catType != ''">
+            AND B.type_cd = #{catType}
+        </if>
+    </select>
+
+</mapper>

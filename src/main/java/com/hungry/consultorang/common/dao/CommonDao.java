@@ -27,6 +27,9 @@ public class CommonDao {
     public List<Object> selectList(String statement, Object param){
         return sqlSession.selectList(statement, param);
     }
+    public List<ParentModel> selectModelList(String statement, Object param){
+        return sqlSession.selectList(statement, param);
+    }
 
     public int update(String statement, Object param){
         return sqlSession.update(statement, param);
