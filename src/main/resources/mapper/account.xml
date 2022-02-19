@@ -19,7 +19,6 @@
         <![CDATA[
              SELECT
                 user_id AS userId,
-                sale_ym AS saleYm,
 	            cat_id AS catId,
 	            cat_nm AS catNm,
 	            type_cd AS typeCd
@@ -27,11 +26,8 @@
             WHERE 1=1
                 AND user_id = #{userId}
         ]]>
-        <if test="saleYm != null and saleYm != ''">
-                AND sale_ym = #{saleYm}
-        </if>
         <if test="catType != null and catType !=''">
-                AND type_cd = #{catType}
+            AND type_cd = #{catType}
         </if>
     </select>
 
@@ -39,10 +35,12 @@
         <![CDATA[
              SELECT
 	            A.menu_id,
-	            A.menu_nm,
+	            B.menu_nm,
 	            A.menu_cost,
 	            A.sale_quantity
             FROM SALES A
+            INNER JOIN MENUS B
+            ON A.menu_id = B.menu_id
             WHERE 1=1
 	            AND A.user_id = #{userId}
 	    ]]>
@@ -51,9 +49,6 @@
         </if>
         <if test="catId != null and catId != ''">
             AND A.cat_id = #{catId}
-        </if>
-        <if test="catType != null and catType != ''">
-            AND B.type_cd = #{catType}
         </if>
     </select>
 

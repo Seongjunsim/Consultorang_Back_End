@@ -257,7 +257,8 @@ public class AccountServiceImpl implements AccountService{
         List<GetCatMenuListResponseModel> ret = new LinkedList<>();
         for(Object cat : catList){
             HashMap<String, Object> c = (HashMap<String, Object>) cat;
-            List<ParentModel> menuList = commonDao.selectModelList("getMenuList", c);
+            c.put("saleYm", param.getSaleYm());
+            List<ParentModel> menuList = commonDao.selectModelList("account.getMenuList", c);
             GetCatMenuListResponseModel model = GetCatMenuListResponseModel.builder()
                 .catId((int)c.get("catId"))
                 .catNm((String)c.get("catNm"))

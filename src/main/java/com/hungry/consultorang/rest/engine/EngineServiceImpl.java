@@ -30,7 +30,7 @@ public class EngineServiceImpl implements EngineService{
     public CatEngineResponseModel getCatEngine(CatEngineRequestModel param)
         throws Exception {
 
-        int size = (int) commonDao.selectOne("engine.getMenuSize", param);
+        int size = (int) commonDao.selectOne("engine.getCatMenuSize", param);
         size = size-(Math.round((float)size/5));
         param.setSize(size);
 

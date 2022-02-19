@@ -9,12 +9,10 @@
             SELECT
             	COUNT(*) AS size
             FROM SALES A
-            INNER JOIN MENUS B
-                ON A.menu_id = B.menu_id
             WHERE A.user_id = #{userId}
                 AND A.sale_ym = #{saleYm}
                 AND A.cat_id = #{catId}
-            ORDER BY B.menu_cost DESC
+            ORDER BY A.menu_cost DESC
         ]]>
     </select>
 
@@ -22,7 +20,7 @@
         <![CDATA[
             SELECT
             	A.menu_id,
-            	A.menu_nm,
+            	B.menu_nm,
             	A.sale_quantity,
             	A.menu_cost,
             	A.sale_quantity*A.menu_cost,
@@ -30,6 +28,8 @@
             	A.contribution_margin,
             	A.menu_engine_cd
             FROM SALES A
+            INNER JOIN MENUS B
+            ON A.menu_id = B.menu_id
             WHERE A.user_id = #{userId}
                 AND A.sale_ym = #{saleYm}
                 AND A.cat_id = #{catId}
@@ -85,5 +85,21 @@
         ]]>
 
 
+    </select>
+
+    <select id="getCatList" resultType="HashMap">
+        <![CDATA[
+             SELECT
+                user_id AS userId,
+	            cat_id AS catId,
+	            cat_nm AS catNm,
+	            type_cd AS typeCd
+            FROM CATEGORY
+            WHERE 1=1
+                AND user_id = #{userId}
+        ]]>
+        <if test="catType != null and catType !=''">
+            AND type_cd = #{catType}
+        </if>
     </select>
 </mapper>
