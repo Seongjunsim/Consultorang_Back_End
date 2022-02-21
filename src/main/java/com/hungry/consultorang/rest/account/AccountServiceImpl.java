@@ -44,7 +44,7 @@ public class AccountServiceImpl implements AccountService{
         int userId = param.getUserId();
 
         // 해당 연월의 데이터가 있는지 파악 => 있다면 예외 호출
-        int size = (int) commonDao.selectOne("engine.getMenuSize", param);
+        int size = (int) commonDao.selectOne("account.getMenuSize", param);
         if(size!=0){
             throw new EngineException("해당 연월에 이미 등록된 데이터가 있습니다.");
         }
@@ -64,7 +64,8 @@ public class AccountServiceImpl implements AccountService{
         int rowSize = parserUtil.getRowSize();
 
         int catId = 0; int menuId = 0;
-
+        int menuMaxId = (int)commonDao.selectOne("account.getMenuMaxId", param);
+        int catMaxId = (int)commonDao.selectOne("account.getCatMaxId",param);
         int row = 6;
 
         double mm=0; double cm=0;
@@ -97,23 +98,33 @@ public class AccountServiceImpl implements AccountService{
                         mm = 1d / (menuSize - Math.round((double) menuSize/5)) * 0.5d;
                         cm = getCm(row, menuSize, parserUtil);
 
-                        reqParam.put("catId", ++catId);
                         reqParam.put("userId", userId);
                         reqParam.put("catNm", catNm);
-                        reqParam.put("saleYm", param.getSaleYm());
-                        commonDao.insert("engine.insertCat", reqParam);
+                        Object o = commonDao.selectOne("getCatId", reqParam);
+                        catId = o==null?0:(int)o;
+                        if(catId==0){
+                            catId = catMaxId++;
+                            reqParam.put("catId", catId);
+                            commonDao.insert("account.insertCat", reqParam);
+                        }
                         reqParam.clear();
                     }
                 }else{ //menu
-                    menuId =
-                        (int)Double.parseDouble(parserUtil.getCellData(row,0));
                     int saleQuantity =
                         (int)Double.parseDouble(parserUtil.getCellData(row, envSet.getCnt()));
                     int menuCost =
                         (int)Double.parseDouble(parserUtil.getCellData(row,envSet.getMenuCost()));
                     String menuNm =
                         parserUtil.getCellData(row, envSet.getMenuNm()).trim();
-
+                    reqParam.put("userId", userId);
+                    reqParam.put("menuNm", menuNm);
+                    Object o = commonDao.selectOne("account.getMenuId", reqParam);
+                    menuId = o==null?0:(int)o;
+                    if(menuId==0){
+                        menuId = menuMaxId++;
+                        reqParam.put("menuId", menuId);
+                        commonDao.insert("account.insertMenu",reqParam);
+                    }
                     double salePercent = Double.parseDouble(parserUtil.getCellData(row, envSet.getSalePercent()));
                     double cntPercent = Double.parseDouble(parserUtil.getCellData(row, envSet.getCntPercent()));
 
@@ -129,11 +140,10 @@ public class AccountServiceImpl implements AccountService{
                         reqParam.put("menuId", menuId);
                         reqParam.put("saleQuantity", saleQuantity);
                         reqParam.put("menuCost", menuCost);
-                        reqParam.put("menuNm", menuNm);
                         reqParam.put("popularity", popularity);
                         reqParam.put("contributionMargin", conMargin);
                         reqParam.put("menuEngineCd", menuEngineCd);
-                        commonDao.insert("engine.insertMenu", reqParam);
+                        commonDao.insert("account.insertSale", reqParam);
                         reqParam.clear();
                     }
                 }
@@ -148,7 +158,7 @@ public class AccountServiceImpl implements AccountService{
         reqParam.put("saleYm", param.getSaleYm());
         reqParam.put("userId", param.getUserId());
 
-        List<Object> list = commonDao.selectList("engine.getCatList", reqParam);
+        List<Object> list = commonDao.selectList("account.getUndefinedCatList", reqParam);
         ParsingExcelFileResponseModel retModel = ParsingExcelFileResponseModel.builder()
             .userId(userId)
             .saleYm(param.getSaleYm())
@@ -247,7 +257,8 @@ public class AccountServiceImpl implements AccountService{
         List<GetCatMenuListResponseModel> ret = new LinkedList<>();
         for(Object cat : catList){
             HashMap<String, Object> c = (HashMap<String, Object>) cat;
-            List<ParentModel> menuList = commonDao.selectModelList("getMenuList", c);
+            c.put("saleYm", param.getSaleYm());
+            List<ParentModel> menuList = commonDao.selectModelList("account.getMenuList", c);
             GetCatMenuListResponseModel model = GetCatMenuListResponseModel.builder()
                 .catId((int)c.get("catId"))
                 .catNm((String)c.get("catNm"))
