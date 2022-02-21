@@ -6,10 +6,12 @@ import com.hungry.consultorang.common.util.ExcelParserUtil;
 import com.hungry.consultorang.config.EnvSet;
 import com.hungry.consultorang.model.ParentModel;
 import com.hungry.consultorang.model.account.*;
+import com.hungry.consultorang.model.dto.UpdateMenuModel;
 import com.hungry.consultorang.rest.engine.EngineServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.security.auth.login.AccountException;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -266,6 +268,24 @@ public class AccountServiceImpl implements AccountService{
             ret.add(model);
         }
         return ret;
+    }
+
+    @Transactional(rollbackFor = AccountException.class)
+    @Override
+    public void updateMenuList(UpdateMenuListRequestModel param) throws Exception {
+        int userId = param.getUserId();
+        String saleYm = param.getSaleYm();
+        HashMap<String, Object> req = new HashMap<>();
+        for(Object o : param.getMenuList()){
+            UpdateMenuModel umm = (UpdateMenuModel) o;
+            req.put("userId", userId);
+            req.put("saleYm", saleYm);
+            req.put("menuId", umm.getMenuId());
+            req.put("menuCost", umm.getMenuCost());
+            req.put("saleQuantity", umm.getSaleQuantity());
+            commonDao.update("account.updateMenu", req);
+            req.clear();
+        }
     }
 
     @Override
