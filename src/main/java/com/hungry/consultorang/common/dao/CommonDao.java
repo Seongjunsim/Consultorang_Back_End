@@ -43,5 +43,14 @@ public class CommonDao {
         return sqlSession.delete(statement, param);
     }
 
+    public void flushStatements(){
+        sqlSession.flushStatements();
+    }
+    public void commit(){
+        sqlSession.commit();
+    }
+
+
+
 
 }

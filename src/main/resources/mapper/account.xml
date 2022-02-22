@@ -148,4 +148,52 @@
             AND user_id = #{userId}
         </if>
     </select>
+    
+    <select id="getCmMmOperand" resultType="CmMmOperandModel">
+        <![CDATA[
+            SELECT
+            	B.totalSaleQuantity,
+            	MIN(sale_quantity)/B.totalSaleQuantity AS minMm,
+            	MAX(sale_quantity)/B.totalSaleQuantity AS maxMm,
+            	MIN(sale_quantity*menu_cost) AS minSale,
+            	MAX(sale_quantity*menu_cost) as maxSale,
+            	AVG(sale_quantity*menu_cost) as cm
+            FROM
+            	SALES A
+            JOIN (
+            	SELECT SUM(sale_quantity) AS totalSaleQuantity
+            	FROM SALES
+            	WHERE user_id = #{userId}
+            	AND sale_ym=#{saleYm}
+            ) B
+            WHERE A.user_id = #{userId}
+            AND A.sale_ym = #{saleYm}
+            AND A.cat_id = #{catId}
+            ORDER BY A.menu_cost DESC
+            LIMIT #{size}
+        ]]>
+    </select>
+
+    <select id="getMenuListWithSize" resultType="UpdateMenuModel">
+        <![CDATA[
+            SELECT *
+            FROM SALES
+
+        ]]>
+    </select>
+
+    <update id="updateSale">
+        UPDATE SALES
+        <set>
+            <if test="menuCost != null and menuCost != ''">menu_cost = #{menuCost},</if>
+            <if test="saleQuantity != null and saleQuantity != ''">sale_quantity=#{saleQuantity},</if>
+            <if test="popularity != null and popularity != ''">popularity = #{popularity},</if>
+            <if test="contributionMargin != null and contributionMargin != ''">contribution_margin = #{contributionMargin},</if>
+            <if test="menuEngineCd != null and menuEngineCd != ''">menu_engine_cd = #{menuEngineCd},</if>
+        </set>
+        WHERE user_id = #{userId}
+        AND sale_ym = #{saleYm}
+        AND cat_id = #{catId}
+        AND menu_id = #{menuId}
+    </update>
 </mapper>
