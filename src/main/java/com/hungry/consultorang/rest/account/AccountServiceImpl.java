@@ -6,10 +6,14 @@ import com.hungry.consultorang.common.util.ExcelParserUtil;
 import com.hungry.consultorang.config.EnvSet;
 import com.hungry.consultorang.model.ParentModel;
 import com.hungry.consultorang.model.account.*;
+import com.hungry.consultorang.model.dto.CmMmOperandModel;
+import com.hungry.consultorang.model.dto.MenuModel;
+import com.hungry.consultorang.model.dto.UpdateMenuModel;
 import com.hungry.consultorang.rest.engine.EngineServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.security.auth.login.AccountException;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -266,6 +270,46 @@ public class AccountServiceImpl implements AccountService{
             ret.add(model);
         }
         return ret;
+    }
+
+    @Transactional(rollbackFor = AccountException.class)
+    @Override
+    public void updateMenuList(UpdateMenuListRequestModel param) throws Exception {
+        int userId = param.getUserId();
+        String saleYm = param.getSaleYm();
+        HashMap<String, Object> req = new HashMap<>();
+        req.put("userId", userId);
+        req.put("saleYm", saleYm);
+        req.put("catId", param.getCatId());
+        for(UpdateMenuModel umm : param.getMenuList()){
+            req.put("menuId", umm.getMenuId());
+            req.put("menuCost", umm.getMenuCost());
+            req.put("saleQuantity", umm.getSaleQuantity());
+            commonDao.update("account.updateSale", req);
+        }
+
+        int size = (int) commonDao.selectOne("engine.getCatMenuSize", req);
+        size -= Math.round((double) size/5);
+        req.put("size", size);
+        double mm = (1/ (double)size) * 0.5d;
+        CmMmOperandModel operand = (CmMmOperandModel) commonDao.selectOne("account.getCmMmOperand", req);
+        List<Object> menuList = commonDao.selectList("engine.getCatMenu",req);
+        for(Object o : menuList){
+            MenuModel m = (MenuModel) o;
+            double menuQ = (double)m.getSaleQuantity()/(double) operand.getTotalSaleQuantity();
+            int popularity = calcPercent(menuQ, mm, operand.getMaxMm(), operand.getMinMm());
+            int contributionMargin = calcPercent(m.getSale(), operand.getCm(), operand.getMaxSale(), operand.getMinSale());
+            String menuEngineCd = generateCd(contributionMargin, popularity);
+
+            req.put("menuCost", m.getMenuCost());
+            req.put("saleQuantity", m.getSaleQuantity());
+            req.put("menuId", m.getMenuId());
+            req.put("popularity", popularity);
+            req.put("contributionMargin", contributionMargin);
+            req.put("menuEngineCd", menuEngineCd);
+            commonDao.update("account.updateSale", req);
+        }
+
     }
 
     @Override

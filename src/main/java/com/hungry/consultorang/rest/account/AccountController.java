@@ -48,6 +48,15 @@ public class AccountController {
         return new ResponseEntity<RestResponse>(res.setSuccess(data), HttpStatus.OK);
     }
 
+    @PostMapping("/updateMenuList")
+    public ResponseEntity<RestResponse> updateMenuList(@RequestBody UpdateMenuListRequestModel param)
+        throws Exception{
+        RestResponse res = new RestResponse();
+        accountService.updateMenuList(param);
+
+        return new ResponseEntity<RestResponse>(res.setSuccess(), HttpStatus.OK);
+    }
+
     @PostMapping("/allcost")
     public ResponseEntity<RestResponse> getAllCost(@RequestBody AllCostRequestModel param) throws Exception{
         RestResponse response = new RestResponse();

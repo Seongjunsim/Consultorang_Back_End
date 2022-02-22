@@ -23,7 +23,7 @@
             	B.menu_nm,
             	A.sale_quantity,
             	A.menu_cost,
-            	A.sale_quantity*A.menu_cost,
+            	A.sale_quantity*A.menu_cost AS sale,
             	A.popularity,
             	A.contribution_margin,
             	A.menu_engine_cd
