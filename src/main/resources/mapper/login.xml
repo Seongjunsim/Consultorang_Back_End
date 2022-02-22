@@ -64,5 +64,13 @@
         ]]>
     </select>
 
+    <select id="checkBusinessNum" resultType="int">
+        <![CDATA[
+            SELECT
+                COUNT(0) CNT
+            FROM BUSINESS
+            WHERE business_num = #{businessNum}
+        ]]>
+    </select>
 
 </mapper>
