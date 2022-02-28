@@ -313,6 +313,11 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
+    public void insertExpend(InsertExpendRequestModel param) throws Exception {
+        commonDao.insert("account.insertExpend", param);
+    }
+
+    @Override
     public AllCostResponseModel getAllCost(AllCostRequestModel param) throws Exception {
         return null;
     }

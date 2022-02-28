@@ -157,6 +157,35 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "사업자번호중복체크",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"businessNum\" : \"2022031323\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/login/checkBusinessNum",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"login",
+								"checkBusinessNum"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -230,6 +259,63 @@
 							"path": [
 								"account",
 								"updateCatType"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "카테고리 타입 별 메뉴 리스트",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\":27,\r\n    \"saleYm\":\"202202\",\r\n    \"catType\":\"MT001\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/account/getCatMenuList",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"getCatMenuList"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "메뉴 단가 및 판매량 업데이트",
+					"request": {
+						"method": "POST",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "지출입력",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/account/insertExpend",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"insertExpend"
 							]
 						}
 					},

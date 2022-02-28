@@ -196,4 +196,13 @@
         AND cat_id = #{catId}
         AND menu_id = #{menuId}
     </update>
+
+    <insert id="insertExpend">
+        <![CDATA[
+            INSERT INTO EXPEND
+            (user_id, expend_ymd, expend_cost, expend_type, re_dt, up_dt)
+            VALUES
+            (#{userId}, #{expendYmd}, #{expendCost}, #{expendType}, NOW(), NOW())
+        ]]>
+    </insert>
 </mapper>
