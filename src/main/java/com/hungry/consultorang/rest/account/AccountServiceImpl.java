@@ -109,7 +109,7 @@ public class AccountServiceImpl implements AccountService{
                         if(catId==0){
                             catId = catMaxId++;
                             reqParam.put("catId", catId);
-                            commonDao.insert("account.insertCat", reqParam);
+                            commonDao.batchInsert("account.insertCat", reqParam);
                         }
                         reqParam.clear();
                     }
@@ -127,7 +127,7 @@ public class AccountServiceImpl implements AccountService{
                     if(menuId==0){
                         menuId = menuMaxId++;
                         reqParam.put("menuId", menuId);
-                        commonDao.insert("account.insertMenu",reqParam);
+                        commonDao.batchInsert("account.insertMenu",reqParam);
                     }
                     double salePercent = Double.parseDouble(parserUtil.getCellData(row, envSet.getSalePercent()));
                     double cntPercent = Double.parseDouble(parserUtil.getCellData(row, envSet.getCntPercent()));
@@ -147,7 +147,7 @@ public class AccountServiceImpl implements AccountService{
                         reqParam.put("popularity", popularity);
                         reqParam.put("contributionMargin", conMargin);
                         reqParam.put("menuEngineCd", menuEngineCd);
-                        commonDao.insert("account.insertSale", reqParam);
+                        commonDao.batchInsert("account.insertSale", reqParam);
                         reqParam.clear();
                     }
                 }
@@ -158,6 +158,7 @@ public class AccountServiceImpl implements AccountService{
         }finally {//파싱 후 바로 엑셀 삭제
             parserUtil.close();
             df.delete();
+            commonDao.flushStatements();
         }
         reqParam.put("saleYm", param.getSaleYm());
         reqParam.put("userId", param.getUserId());
@@ -285,8 +286,11 @@ public class AccountServiceImpl implements AccountService{
             req.put("menuId", umm.getMenuId());
             req.put("menuCost", umm.getMenuCost());
             req.put("saleQuantity", umm.getSaleQuantity());
-            commonDao.update("account.updateSale", req);
+            commonDao.batchUpdate("account.updateSale", req);
         }
+
+        commonDao.flushStatements();
+
 
         int size = (int) commonDao.selectOne("engine.getCatMenuSize", req);
         size -= Math.round((double) size/5);
@@ -307,8 +311,9 @@ public class AccountServiceImpl implements AccountService{
             req.put("popularity", popularity);
             req.put("contributionMargin", contributionMargin);
             req.put("menuEngineCd", menuEngineCd);
-            commonDao.update("account.updateSale", req);
+            commonDao.batchUpdate("account.updateSale", req);
         }
+        commonDao.flushStatements();
 
     }
 
