@@ -57,6 +57,14 @@ public class AccountController {
         return new ResponseEntity<RestResponse>(res.setSuccess(), HttpStatus.OK);
     }
 
+    @PostMapping("/insertExpend")
+    public ResponseEntity<RestResponse> insertExpend(@RequestBody InsertExpendRequestModel param)
+        throws Exception{
+        RestResponse res = new RestResponse();
+        accountService.insertExpend(param);
+        return new ResponseEntity<RestResponse>(res.setSuccess(), HttpStatus.OK);
+    }
+
     @PostMapping("/allcost")
     public ResponseEntity<RestResponse> getAllCost(@RequestBody AllCostRequestModel param) throws Exception{
         RestResponse response = new RestResponse();
