@@ -140,13 +140,8 @@
             FROM CATEGORY
             WHERE 1=1
             AND type_cd IS NULL
-        ]]>
-        <if test="catId != null and catId != ''">
-            AND cat_id = #{catId}
-        </if>
-        <if test="userId != null and userId != ''">
             AND user_id = #{userId}
-        </if>
+        ]]>
     </select>
     
     <select id="getCmMmOperand" resultType="CmMmOperandModel">
@@ -205,4 +200,43 @@
             (#{userId}, #{expendYmd}, #{expendCost}, #{expendType}, NOW(), NOW())
         ]]>
     </insert>
+
+    <select id="getRecentCost" resultType="int">
+        <![CDATA[
+            SELECT c_sales
+            FROM SALES_INSERT_HISTORY
+            WHERE user_id = #{userId}
+            AND sale_ymd BETWEEN #{startYmd} AND #{endYmd}
+        ]]>
+    </select>
+
+    <select id="getMenu" resultType="int">
+        <![CDATA[
+            SELECT user_id
+            FROM SALES
+            WHERE user_id = #{userId}
+            AND sale_ym = #{saleYm}
+            AND cat_id = #{catId}
+            AND menu_id = #{menuId}
+        ]]>
+    </select>
+
+    <insert id="insertIHistory">
+        <![CDATA[
+            INSERT INTO SALES_INSERT_HISTORY
+            (user_id, sale_ymd, b_sales, c_sales, re_dt)
+            VALUES
+            (#{userId}, #{saleYmd}, #{bSales}, #{cSales}, NOW())
+        ]]>
+    </insert>
+
+    <select id="getTotalSales" resultType="int">
+        SELECT
+            SUM(menu_cost * sale_quantity)
+        FROM
+            SALES
+        WHERE
+            user_id = #{userId}
+            AND sale_ym = #{saleYm}
+    </select>
 </mapper>

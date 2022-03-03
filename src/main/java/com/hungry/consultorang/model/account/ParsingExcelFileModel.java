@@ -13,5 +13,6 @@ public class ParsingExcelFileModel extends ParentModel {
     int userId;
     int catId;
     String fileNm;
+    String parserType;
     MultipartFile multipartFile;
 }

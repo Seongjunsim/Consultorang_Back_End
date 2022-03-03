@@ -9,6 +9,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode
 @Builder
 public class MenuModel extends ParentModel {
+    int userId;
+    String saleYm;
+    int catId;
     int menuId;
     String menuNm;
     int menuCost;

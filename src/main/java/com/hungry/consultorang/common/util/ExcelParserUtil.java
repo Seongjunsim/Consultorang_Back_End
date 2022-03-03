@@ -23,6 +23,11 @@ public class ExcelParserUtil {
         rowSize = sheet.getPhysicalNumberOfRows();
     }
 
+    public void chageSheetNum(int SheetNum) throws Exception{
+        sheet = workbook.getSheetAt(SheetNum);
+        rowSize = sheet.getPhysicalNumberOfRows();
+    }
+
     public int getRowSize(){return rowSize;}
     public int getColSize(int row){return sheet.getRow(row).getPhysicalNumberOfCells()+1;}
 
