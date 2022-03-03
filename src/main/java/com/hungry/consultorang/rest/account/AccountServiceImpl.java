@@ -72,26 +72,35 @@ public class AccountServiceImpl implements AccountService{
 
         HashMap<String, Object> reqParam = new HashMap<>();
         HashMap<String, List<MenuModel>> menuList = cep.getMenuList();
-
-
+        HashMap<String, Integer> historyList = cep.getHistoryList();
         //parsing sales history
 
+        HashMap<String, Object> historyReqParam = new HashMap<>();
+        historyReqParam.put("userId", userId);
+        historyReqParam.put("startYmd", param.getSaleYm()+"00");
+        historyReqParam.put("endYmd", param.getSaleYm()+"99");
+        List<Object> hsl =  commonDao.selectList("account.getHistorySet", historyReqParam);
+        HashSet<String> historySet = new HashSet<>();
+        for(Object o : hsl){
+            historySet.add((String) o);
+        }
+        for(String saleYmd : historyList.keySet()){
+            historyReqParam.put("saleYmd", saleYmd);
+            historyReqParam.put("saleVal", historyList.get(saleYmd));
 
-
+            if(historySet.contains(saleYmd)){
+                commonDao.batchUpdate("account.updateHistory", historyReqParam);
+            }else{
+                commonDao.batchInsert("account.insertHistory", historyReqParam);
+            }
+        }
 
         //parsing sales data
         parserUtil.chageSheetNum(1);
 
-        int rowSize = parserUtil.getRowSize();
-
         int catId = 0; int menuId = 0;
         int menuMaxId = (int)commonDao.selectOne("account.getMenuMaxId", param);
         int catMaxId = (int)commonDao.selectOne("account.getCatMaxId",param);
-        int row = 6;
-
-        double mm=0; double cm=0;
-
-        int menuSize=0; double menuSaleMax=0; double menuSaleMin=0; double menuCntMax=0; double menuCntMin=0;
 
         reqParam.put("userId", userId);
         reqParam.put("saleYm", param.getSaleYm());

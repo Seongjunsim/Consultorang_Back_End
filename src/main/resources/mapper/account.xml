@@ -201,15 +201,6 @@
         ]]>
     </insert>
 
-    <select id="getRecentCost" resultType="int">
-        <![CDATA[
-            SELECT c_sales
-            FROM SALES_INSERT_HISTORY
-            WHERE user_id = #{userId}
-            AND sale_ymd BETWEEN #{startYmd} AND #{endYmd}
-        ]]>
-    </select>
-
     <select id="getMenu" resultType="int">
         <![CDATA[
             SELECT user_id
@@ -221,14 +212,38 @@
         ]]>
     </select>
 
-    <insert id="insertIHistory">
+    <insert id="insertHistory">
         <![CDATA[
-            INSERT INTO SALES_INSERT_HISTORY
-            (user_id, sale_ymd, b_sales, c_sales, re_dt)
+            INSERT INTO SALES_HISTORY
+            (user_id, sale_ymd, sale_val, re_dt, up_dt)
             VALUES
-            (#{userId}, #{saleYmd}, #{bSales}, #{cSales}, NOW())
+            (#{userId}, #{saleYmd}, #{saleVal}, NOW(), NOW())
         ]]>
     </insert>
+
+    <update id="updateHistory">
+        <![CDATA[
+            UPDATE SALES_HISTORY
+            SET
+                sale_val = #{saleVal},
+                re_dt = NOW(),
+                up_dt = NOW()
+            WHERE 1=1
+                AND user_id = #{userId}
+                AND sale_ymd = #{saleYmd}
+        ]]>
+    </update>
+
+    <select id="getHistorySet" resultType="String">
+        <![CDATA[
+            SELECT
+                sale_ymd
+            FROM SALES_HISTORY
+            WHERE 1=1
+            AND user_id = #{userId}
+            AND sale_ymd BETWEEN #{startYmd} AND #{endYmd}
+        ]]>
+    </select>
 
     <select id="getTotalSales" resultType="int">
         SELECT

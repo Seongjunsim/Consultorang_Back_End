@@ -2,6 +2,7 @@ package com.hungry.consultorang.common.parser;
 
 import com.hungry.consultorang.common.util.ExcelParserUtil;
 import com.hungry.consultorang.model.dto.MenuModel;
+import com.hungry.consultorang.model.dto.SaleHistoryModel;
 import com.hungry.consultorang.model.parser.CategoryParserModel;
 import com.hungry.consultorang.rest.account.AccountServiceImpl;
 
@@ -14,7 +15,7 @@ public class CompanyExcelParser {
     protected ExcelParserUtil excelParserUtil;
     protected HashMap<String, CategoryParserModel> catList = new HashMap<>();
     protected HashMap<String, List<MenuModel>> menuList = new HashMap<>();
-    protected List<Object> historyList = new LinkedList<>();
+    protected HashMap<String, Integer> historyMap = new HashMap<>();
 
     public HashMap<String, CategoryParserModel> getCatList() {
         return catList;
@@ -24,8 +25,8 @@ public class CompanyExcelParser {
         return menuList;
     }
 
-    public List<Object> getHistoryList() {
-        return historyList;
+    public HashMap<String, Integer> getHistoryList() {
+        return historyMap;
     }
 
     protected class CmPair implements Comparable<CmPair>{

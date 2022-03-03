@@ -2,6 +2,7 @@ package com.hungry.consultorang.common.parser;
 
 import com.hungry.consultorang.common.util.ExcelParserUtil;
 import com.hungry.consultorang.model.dto.MenuModel;
+import com.hungry.consultorang.model.dto.SaleHistoryModel;
 import com.hungry.consultorang.model.parser.CategoryParserModel;
 import com.hungry.consultorang.model.parser.MenuParserModel;
 import com.hungry.consultorang.rest.account.AccountServiceImpl;
@@ -14,23 +15,47 @@ import java.util.PriorityQueue;
 public class PosPowerExcelParser extends CompanyExcelParser{
     private final int ID=0, CAT=1,MENU_NM=2, MENU_COST=3, CNT=4, CNT_PERCENT=5, SALE=6
         ,SALE_PERCENT=7;
+    private final int YMD=0, SALE_VAL=3;
     private final int MENU_START_ROW=6;
     private final int HISTORY_SHEET = 0;
+    private final int HISTORY_START_ROW=10;
     private final int MENU_CATEGORY_SHEET = 1;
     private final String CATEGORY = "카테고리";
 
 
     public PosPowerExcelParser(ExcelParserUtil excelParserUtil) throws Exception{
         super.excelParserUtil = excelParserUtil;
-        int row = MENU_START_ROW;
+        int row = 0;
+        int rowSize = 0;
 
         // history
+        excelParserUtil.chageSheetNum(HISTORY_SHEET);
+        row = HISTORY_START_ROW;
+        rowSize = excelParserUtil.getRowSize();
 
+        while(row<=rowSize){
+            String temp = excelParserUtil.getCellData(row, YMD);
+            if(!temp.contains("-")){
+                row++;
+                continue;
+            }
+            String saleYmd = temp.trim().replaceAll("-", "");
+            String vs = excelParserUtil.getCellData(row, SALE_VAL);
+            int value =  vs.contains("-") ?
+                0 : (int)Double.parseDouble(vs);
+
+            if(historyMap.containsKey(saleYmd)){
+                historyMap.put(saleYmd, historyMap.get(saleYmd)+value);
+            }else{
+                historyMap.put(saleYmd, value);
+            }
+            row++;
+        }
 
         //menu & category
         excelParserUtil.chageSheetNum(MENU_CATEGORY_SHEET);
         row = MENU_START_ROW;
-        int rowSize = excelParserUtil.getRowSize();
+        rowSize = excelParserUtil.getRowSize();
         String catNm="";
 
         int menuSize=0;
