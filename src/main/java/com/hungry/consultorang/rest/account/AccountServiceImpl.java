@@ -242,6 +242,11 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
+    public List<Object> getTotalHistoryList(TotalHistoryRequestModel param) throws Exception {
+        return commonDao.selectList("account.getTotalHistoryList", param);
+    }
+
+    @Override
     public AllCostResponseModel getAllCost(AllCostRequestModel param) throws Exception {
         return null;
     }
@@ -250,4 +255,6 @@ public class AccountServiceImpl implements AccountService{
     public InsertCostResponseModel insertCost(InsertCostRequestModel param) throws Exception {
         return null;
     }
+
+
 }

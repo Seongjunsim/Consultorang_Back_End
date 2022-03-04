@@ -25,4 +25,7 @@ public interface AccountService {
 
     public InsertCostResponseModel insertCost(InsertCostRequestModel param)
         throws Exception;
+
+    public List<Object> getTotalHistoryList(TotalHistoryRequestModel param)
+        throws Exception;
 }

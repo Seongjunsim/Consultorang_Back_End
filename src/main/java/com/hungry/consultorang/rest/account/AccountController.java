@@ -65,22 +65,13 @@ public class AccountController {
         return new ResponseEntity<RestResponse>(res.setSuccess(), HttpStatus.OK);
     }
 
-    @PostMapping("/allcost")
-    public ResponseEntity<RestResponse> getAllCost(@RequestBody AllCostRequestModel param) throws Exception{
-        RestResponse response = new RestResponse();
-
-        AllCostResponseModel resData = accountService.getAllCost(param);
-
-        return new ResponseEntity<RestResponse>(response.setSuccess(resData), HttpStatus.OK);
+    @PostMapping("/getTotalHistoryList")
+    public ResponseEntity<RestResponse> getTotalHistoryList(@RequestBody TotalHistoryRequestModel param)
+        throws Exception{
+        RestResponse res = new RestResponse();
+        List<Object> data = accountService.getTotalHistoryList(param);
+        return new ResponseEntity<RestResponse>(res.setSuccess(data), HttpStatus.OK);
     }
 
-    @PostMapping("/all")
-    public ResponseEntity<RestResponse> insertCost(@RequestBody InsertCostRequestModel param) throws Exception{
-        RestResponse response = new RestResponse();
-
-        InsertCostResponseModel resData = accountService.insertCost(param);
-
-        return new ResponseEntity<RestResponse>(response.setSuccess(resData), HttpStatus.OK);
-    }
 
 }

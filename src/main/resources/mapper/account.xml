@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
@@ -253,5 +254,49 @@
         WHERE
             user_id = #{userId}
             AND sale_ym = #{saleYm}
+    </select>
+
+    <select id="getTotalHistoryList" resultType="TotalHistoryModel">
+        <![CDATA[
+            SELECT
+	            A.history_type,
+	            A.specific_type,
+	            A.type_nm,
+	            A.ymd,
+	            A.val
+            FROM (
+	            SELECT
+            		'SALE' AS history_type,
+            		'null' AS specific_type,
+            		'영업 이익' AS type_nm,
+            		sale_ymd AS ymd,
+            		sale_val AS val
+            	FROM SALES_HISTORY
+            	WHERE user_id=#{userId}
+            	AND sale_ymd BETWEEN #{startYmd} AND #{endYmd}
+            	UNION
+            	SELECT
+            		'EXPEND' AS history_type,
+            		B.expend_type AS specific_type,
+            		C.code_nm AS type_nm,
+            		B.expend_ymd AS ymd,
+            		B.expend_cost AS val
+            	FROM EXPEND B
+            	JOIN CODES C ON B.expend_type = C.cd
+            	WHERE user_id=#{userId}
+            	AND expend_ymd BETWEEN #{startYmd} AND #{endYmd}
+            ) A
+            WHERE 1=1
+        ]]>
+        <if test="historyType!=null and historyType != '' and historyType!='TOTAL'">
+            AND A.history_type = #{historyType}
+        </if>
+        <if test="specificType!=null and specificType != ''">
+            AND A.specific_type = #{specificType}
+        </if>
+        <![CDATA[
+            ORDER BY ymd
+        ]]>
+
     </select>
 </mapper>
