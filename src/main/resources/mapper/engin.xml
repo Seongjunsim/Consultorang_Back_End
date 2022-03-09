@@ -17,7 +17,7 @@
         ]]>
     </select>
 
-    <select id="getCatMenu" resultType="MenuModel">
+    <select id="getCatMenu" resultType="EngineMenuModel">
         <![CDATA[
             SELECT
             	A.menu_id,

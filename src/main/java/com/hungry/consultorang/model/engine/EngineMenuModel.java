@@ -1,4 +1,4 @@
-package com.hungry.consultorang.model.dto;
+package com.hungry.consultorang.model.engine;
 
 import com.hungry.consultorang.model.ParentModel;
 import lombok.Builder;
@@ -6,16 +6,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode
 @Builder
-public class MenuModel extends ParentModel {
-    int userId;
-    String saleYm;
-    int catId;
+@EqualsAndHashCode
+public class EngineMenuModel extends ParentModel {
     int menuId;
     String menuNm;
-    int menuCost;
     int saleQuantity;
+    int menuCost;
     int sale;
     int popularity;
     int contributionMargin;

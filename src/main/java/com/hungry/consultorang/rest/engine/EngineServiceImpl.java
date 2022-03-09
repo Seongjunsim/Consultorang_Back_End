@@ -36,14 +36,14 @@ public class EngineServiceImpl implements EngineService{
 
         CatEngineTotalModel total = (CatEngineTotalModel) commonDao.selectOne("engine.getCatTotal", param);
 
-        List<MenuModel> first = new LinkedList<>();
-        List<MenuModel> second = new LinkedList<>();
-        List<MenuModel> thrid = new LinkedList<>();
+        List<EngineMenuModel> first = new LinkedList<>();
+        List<EngineMenuModel> second = new LinkedList<>();
+        List<EngineMenuModel> thrid = new LinkedList<>();
 
         List<Object> list = commonDao.selectList("engine.getCatMenu", param);
 
         for(Object o : list){
-            MenuModel m = (MenuModel) o;
+            EngineMenuModel m = (EngineMenuModel) o;
             switch (m.getMenuEngineCd()){
                 case "ME001":
                     first.add(m);
