@@ -256,5 +256,31 @@ public class AccountServiceImpl implements AccountService{
         return null;
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void insertEtcMenu(List<InsertEtcMenuRequestModel> param) throws Exception {
+        for(InsertEtcMenuRequestModel model : param){
+            commonDao.batchInsert("account.insertEtcMenu", model);
+        }
+        commonDao.flushStatements();
+    }
 
+    @Override
+    public List<Object> getEtcMenuList(GetEtcMenuListRequestModel param) throws Exception {
+        if(param.getStartYmd()==null || param.getStartYmd().equals("")){
+            param.setStartYmd("0");
+        }
+        if(param.getEndYmd()==null || param.getEndYmd().equals("")){
+            param.setEndYmd("99999999");
+        }
+        return commonDao.selectList("account.getEtcMenu", param);
+    }
+
+    @Override
+    public void deleteEtcMenu(List<DeleteEtcMenuModel> param) throws Exception {
+        for(DeleteEtcMenuModel model : param){
+            commonDao.batchDelete("account.deleteEtcMenu", model);
+        }
+        commonDao.flushStatements();
+    }
 }

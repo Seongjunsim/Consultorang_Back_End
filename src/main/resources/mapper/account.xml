@@ -299,4 +299,35 @@
         ]]>
 
     </select>
+
+    <insert id="insertEtcMenu">
+        <![CDATA[
+            INSERT INTO ETC_SALES
+            (user_id, sale_ymd, menu_nm, menu_sale, reg_dt, up_dt)
+            VALUES
+            (#{userId}, #{saleYmd}, #{menuNm}, #{menuSale}, NOW(), NOW())
+        ]]>
+    </insert>
+
+    <select id="getEtcMenu" resultType="EtcMenuModel">
+        <![CDATA[
+            SELECT
+                etc_id,
+                sale_ymd,
+                menu_nm,
+                menu_sale
+            FROM
+                ETC_SALES
+            WHERE 1=1
+            AND user_id=#{userId}
+            AND sale_ymd BETWEEN #{startYmd} AND #{endYmd}
+        ]]>
+    </select>
+
+    <delete id="deleteEtcMenu">
+        <![CDATA[
+            DELETE FROM ETC_SALES
+            WHERE etc_id = #{etcId}
+        ]]>
+    </delete>
 </mapper>

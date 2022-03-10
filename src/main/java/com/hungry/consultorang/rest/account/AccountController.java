@@ -73,5 +73,28 @@ public class AccountController {
         return new ResponseEntity<RestResponse>(res.setSuccess(data), HttpStatus.OK);
     }
 
+    @PostMapping("/insertEtcMenu")
+    public ResponseEntity<RestResponse> insertEtcMenu(@RequestBody List<InsertEtcMenuRequestModel> param)
+        throws Exception{
+        RestResponse res = new RestResponse();
+        accountService.insertEtcMenu(param);
+        return new ResponseEntity<RestResponse>(res.setSuccess(), HttpStatus.OK);
+    }
 
+    @PostMapping("/getEtcMenuList")
+    public ResponseEntity<RestResponse> getEtcMenuList(@RequestBody GetEtcMenuListRequestModel param)
+        throws Exception{
+        RestResponse res = new RestResponse();
+        List<Object> data = accountService.getEtcMenuList(param);
+
+        return new ResponseEntity<RestResponse>(res.setSuccess(data), HttpStatus.OK);
+    }
+
+    @PostMapping("/deleteEtcMenu")
+    public ResponseEntity<RestResponse> deleteEtcMenu(@RequestBody List<DeleteEtcMenuModel> param)
+        throws Exception{
+        RestResponse res = new RestResponse();
+        accountService.deleteEtcMenu(param);
+        return new ResponseEntity<RestResponse>(res.setSuccess(), HttpStatus.OK);
+    }
 }
