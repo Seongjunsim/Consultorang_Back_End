@@ -6,10 +6,8 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode
-public class TotalHistoryModel extends ParentModel {
-    String historyType;
-    String specificType;
-    String typeNm;
-    String ymd;
-    String val;
+public class InsertMemoRequestModel extends ParentModel {
+    int userId;
+    String memoYmd;
+    String memoStr;
 }

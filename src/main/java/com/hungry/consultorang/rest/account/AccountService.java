@@ -34,4 +34,6 @@ public interface AccountService {
         throws Exception;
     public void deleteEtcMenu(List<DeleteEtcMenuModel> param)
         throws Exception;
+
+    void insertMemo(InsertMemoRequestModel param);
 }

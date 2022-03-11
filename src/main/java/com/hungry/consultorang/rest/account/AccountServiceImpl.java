@@ -283,4 +283,9 @@ public class AccountServiceImpl implements AccountService{
         }
         commonDao.flushStatements();
     }
+
+    @Override
+    public void insertMemo(InsertMemoRequestModel param) {
+        commonDao.insert("account.insertMemo", param);
+    }
 }

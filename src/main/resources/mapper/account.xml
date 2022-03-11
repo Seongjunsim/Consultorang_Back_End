@@ -268,12 +268,23 @@
 	            SELECT
             		'SALE' AS history_type,
             		'null' AS specific_type,
-            		'영업 이익' AS type_nm,
+            		'영업 수익' AS type_nm,
             		sale_ymd AS ymd,
             		sale_val AS val
             	FROM SALES_HISTORY
             	WHERE user_id=#{userId}
             	AND sale_ymd BETWEEN #{startYmd} AND #{endYmd}
+            	UNION
+            	SELECT
+            	    'SALE' AS history_type,
+            	    'null' AS specific_type,
+            	    '기타 수익' AS type_nm,
+            	    sale_ymd AS ymd,
+                    SUM(menu_sale) AS val
+                FROM ETC_SALES
+                WHERE user_id=#{userId}
+            	AND sale_ymd BETWEEN #{startYmd} AND #{endYmd}
+            	GROUP BY sale_ymd
             	UNION
             	SELECT
             		'EXPEND' AS history_type,
@@ -285,6 +296,16 @@
             	JOIN CODES C ON B.expend_type = C.cd
             	WHERE user_id=#{userId}
             	AND expend_ymd BETWEEN #{startYmd} AND #{endYmd}
+            	UNION
+            	SELECT
+            	    'MEMO' AS history_type,
+            	    'null' AS specific_type,
+            	    'MEMO' AS type_nm,
+            	    memo_ymd AS ymd,
+            	    memo_str AS val
+            	FROM MEMOS
+            	WHERE user_id=#{userId}
+            	AND memo_ymd BETWEEN #{startYmd} AND #{endYmd}
             ) A
             WHERE 1=1
         ]]>
@@ -330,4 +351,15 @@
             WHERE etc_id = #{etcId}
         ]]>
     </delete>
+
+    <insert id="insertMemo">
+        <![CDATA[
+            INSERT INTO MEMOS
+            (user_id, memo_ymd, memo_str, reg_dt, up_dt)
+            VALUES
+            (#{userId}, #{memoYmd}, #{memoStr}, NOW(), NOW())
+        ]]>
+    </insert>
+
+
 </mapper>

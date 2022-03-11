@@ -97,4 +97,14 @@ public class AccountController {
         accountService.deleteEtcMenu(param);
         return new ResponseEntity<RestResponse>(res.setSuccess(), HttpStatus.OK);
     }
+
+    @PostMapping("/insertMemo")
+    public ResponseEntity<RestResponse> insertMemo(@RequestBody InsertMemoRequestModel param)
+        throws Exception{
+        RestResponse res = new RestResponse();
+
+        accountService.insertMemo(param);
+        return new ResponseEntity<RestResponse>(res.setSuccess(), HttpStatus.OK);
+    }
+
 }
