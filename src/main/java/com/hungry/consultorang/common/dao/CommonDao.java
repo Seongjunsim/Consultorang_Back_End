@@ -55,6 +55,9 @@ public class CommonDao {
         return sqlSession.delete(statement, param);
     }
 
+    public int batchDelete(String statement, Object param){
+        return batchSqlSession.delete(statement, param);
+    }
     public void flushStatements(){
         this.batchSqlSession.flushStatements();
     }

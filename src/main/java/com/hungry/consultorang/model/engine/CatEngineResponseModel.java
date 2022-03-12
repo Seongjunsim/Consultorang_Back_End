@@ -14,7 +14,7 @@ import java.util.List;
 public class CatEngineResponseModel extends ParentModel {
     int totalCnt;
     int totalSale;
-    List<MenuModel> first;
-    List<MenuModel> second;
-    List<MenuModel> third;
+    List<EngineMenuModel> first;
+    List<EngineMenuModel> second;
+    List<EngineMenuModel> third;
 }

@@ -65,22 +65,46 @@ public class AccountController {
         return new ResponseEntity<RestResponse>(res.setSuccess(), HttpStatus.OK);
     }
 
-    @PostMapping("/allcost")
-    public ResponseEntity<RestResponse> getAllCost(@RequestBody AllCostRequestModel param) throws Exception{
-        RestResponse response = new RestResponse();
-
-        AllCostResponseModel resData = accountService.getAllCost(param);
-
-        return new ResponseEntity<RestResponse>(response.setSuccess(resData), HttpStatus.OK);
+    @PostMapping("/getTotalHistoryList")
+    public ResponseEntity<RestResponse> getTotalHistoryList(@RequestBody TotalHistoryRequestModel param)
+        throws Exception{
+        RestResponse res = new RestResponse();
+        List<Object> data = accountService.getTotalHistoryList(param);
+        return new ResponseEntity<RestResponse>(res.setSuccess(data), HttpStatus.OK);
     }
 
-    @PostMapping("/all")
-    public ResponseEntity<RestResponse> insertCost(@RequestBody InsertCostRequestModel param) throws Exception{
-        RestResponse response = new RestResponse();
+    @PostMapping("/insertEtcMenu")
+    public ResponseEntity<RestResponse> insertEtcMenu(@RequestBody List<InsertEtcMenuRequestModel> param)
+        throws Exception{
+        RestResponse res = new RestResponse();
+        accountService.insertEtcMenu(param);
+        return new ResponseEntity<RestResponse>(res.setSuccess(), HttpStatus.OK);
+    }
 
-        InsertCostResponseModel resData = accountService.insertCost(param);
+    @PostMapping("/getEtcMenuList")
+    public ResponseEntity<RestResponse> getEtcMenuList(@RequestBody GetEtcMenuListRequestModel param)
+        throws Exception{
+        RestResponse res = new RestResponse();
+        List<Object> data = accountService.getEtcMenuList(param);
 
-        return new ResponseEntity<RestResponse>(response.setSuccess(resData), HttpStatus.OK);
+        return new ResponseEntity<RestResponse>(res.setSuccess(data), HttpStatus.OK);
+    }
+
+    @PostMapping("/deleteEtcMenu")
+    public ResponseEntity<RestResponse> deleteEtcMenu(@RequestBody List<DeleteEtcMenuModel> param)
+        throws Exception{
+        RestResponse res = new RestResponse();
+        accountService.deleteEtcMenu(param);
+        return new ResponseEntity<RestResponse>(res.setSuccess(), HttpStatus.OK);
+    }
+
+    @PostMapping("/insertMemo")
+    public ResponseEntity<RestResponse> insertMemo(@RequestBody InsertMemoRequestModel param)
+        throws Exception{
+        RestResponse res = new RestResponse();
+
+        accountService.insertMemo(param);
+        return new ResponseEntity<RestResponse>(res.setSuccess(), HttpStatus.OK);
     }
 
 }

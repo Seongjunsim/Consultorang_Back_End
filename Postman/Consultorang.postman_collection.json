@@ -320,6 +320,38 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "히스토리 리스트 조회",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\":27,\r\n    \"startYmd\" : \"20211201\",\r\n    \"endYmd\" : \"20211231\",\r\n    \"historyType\" : \"\",\r\n    \"specificType\" : \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/account/getTotalHistoryList",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"getTotalHistoryList"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}

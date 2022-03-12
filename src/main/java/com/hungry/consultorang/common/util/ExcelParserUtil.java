@@ -20,7 +20,12 @@ public class ExcelParserUtil {
         fis = new FileInputStream(fileNm);
         workbook = new XSSFWorkbook(fis);
         sheet = workbook.getSheetAt(SheetNum);
-        rowSize = sheet.getPhysicalNumberOfRows();
+        rowSize = sheet.getLastRowNum();
+    }
+
+    public void chageSheetNum(int SheetNum) throws Exception{
+        sheet = workbook.getSheetAt(SheetNum);
+        rowSize = sheet.getLastRowNum();
     }
 
     public int getRowSize(){return rowSize;}

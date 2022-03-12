@@ -25,4 +25,15 @@ public interface AccountService {
 
     public InsertCostResponseModel insertCost(InsertCostRequestModel param)
         throws Exception;
+
+    public List<Object> getTotalHistoryList(TotalHistoryRequestModel param)
+        throws Exception;
+    public void insertEtcMenu(List<InsertEtcMenuRequestModel> param)
+        throws Exception;
+    public List<Object> getEtcMenuList(GetEtcMenuListRequestModel param)
+        throws Exception;
+    public void deleteEtcMenu(List<DeleteEtcMenuModel> param)
+        throws Exception;
+
+    void insertMemo(InsertMemoRequestModel param);
 }
