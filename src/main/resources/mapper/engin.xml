@@ -30,7 +30,7 @@
             	A.menu_engine_cd
             FROM SALES A
             INNER JOIN MENUS B
-            ON A.menu_id = B.menu_id
+            ON A.menu_id = B.menu_id AND A.user_id = B.user_id
             WHERE A.user_id = #{userId}
                 AND A.sale_ym = #{saleYm}
                 AND A.cat_id = #{catId}
