@@ -15,4 +15,7 @@ public interface EngineService {
     public List<Object> getCatList(HashMap<String,Object> param)
         throws Exception;
 
+    public List<EngineSolResponseModel> getEngineSolList(List<EngineSolRequestModel> param)
+        throws Exception;
+
 }
