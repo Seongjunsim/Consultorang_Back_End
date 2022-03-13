@@ -103,4 +103,17 @@
             AND type_cd = #{catType}
         </if>
     </select>
+
+    <select id="getEngineSolList" resultType="SolutionModel">
+        <![CDATA[
+            SELECT
+                B.sol_title,
+                B.sol_content,
+                B.img_id
+            FROM MONTHLY_SOL A
+            INNER JOIN ENGINE_SOL B
+            ON A.medal_type = B.medal_type AND A.sol_id = B.sol_id
+            WHERE A.medal_type = #{medalType}
+        ]]>
+    </select>
 </mapper>
