@@ -288,4 +288,41 @@ public class AccountServiceImpl implements AccountService{
     public void insertMemo(InsertMemoRequestModel param) {
         commonDao.insert("account.insertMemo", param);
     }
+
+    @Override
+    public List<SaleExpendYmdModel> getSaleExpendYmd(GetSaleExpendYmdRequestModel param) throws Exception {
+        List<SaleExpendYmdModel> list = new LinkedList<>();
+        HashSet<String> sales = new HashSet<>();
+        HashSet<String> expends = new HashSet<>();
+
+        List<Object> s = commonDao.selectList("account.getSaleYmd", param);
+        List<Object> e = commonDao.selectList("account.getExpendYmd", param);
+
+        for(Object o : s){
+            sales.add((String) o);
+        }
+        for(Object o : e){
+            expends.add((String) o);
+        }
+
+        String ymd = param.getStartYmd();
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+        while(!ymd.equals(param.getEndYmd())){
+
+            SaleExpendYmdModel model = SaleExpendYmdModel.builder()
+                .ymd(ymd)
+                .expend(expends.contains(ymd))
+                .sale(sales.contains(ymd)).build();
+            list.add(model);
+
+            Date date = format.parse(ymd);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.DATE, 1);
+            ymd = format.format(calendar.getTime());
+        }
+
+
+        return list;
+    }
 }
