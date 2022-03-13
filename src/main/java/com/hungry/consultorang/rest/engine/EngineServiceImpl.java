@@ -75,35 +75,26 @@ public class EngineServiceImpl implements EngineService{
     }
 
     @Override
-    public List<EngineSolResponseModel> getEngineSolList(List<EngineSolRequestModel> param) throws Exception {
+    public EngineSolResponseModel getEngineSolList(EngineSolRequestModel param) throws Exception {
 
-        List<EngineSolResponseModel> ret = new LinkedList<>();
-
-        for(EngineSolRequestModel model : param){
-            String totalSol="";
-            switch (model.getMedalType()){
-                case 1:
-                    totalSol = model.isHasMenu() ? solutionSet.getGoldTotal() : solutionSet.getGoldNo();
-                    break;
-                case 2:
-                    totalSol = model.isHasMenu() ? solutionSet.getSilverTotal() : solutionSet.getSilverNo();
-                    break;
-                case 3:
-                    totalSol = model.isHasMenu() ? solutionSet.getBronzeTotal() : solutionSet.getBronzeNo();
-                    break;
-            }
-            List<Object> solutions = new LinkedList<>();
-            if(model.isHasMenu()){
-                solutions = commonDao.selectList("engine.getEngineSolList", model);
-            }
-
-            EngineSolResponseModel esrm = EngineSolResponseModel.builder()
-                .medalType(model.getMedalType())
-                .solutions(solutions)
-                .totalSol(totalSol).build();
-            ret.add(esrm);
+        String totalSol="";
+        switch (param.getMedalType()){
+            case 1:
+                totalSol = param.isHasMenu() ? solutionSet.getGoldTotal() : solutionSet.getGoldNo();
+                break; case 2: totalSol = param.isHasMenu() ? solutionSet.getSilverTotal() : solutionSet.getSilverNo();
+                break; case 3: totalSol = param.isHasMenu() ? solutionSet.getBronzeTotal() : solutionSet.getBronzeNo();
+                break;
         }
+        List<Object> solutions = new LinkedList<>();
+        if(param.isHasMenu()){
+            solutions = commonDao.selectList("engine.getEngineSolList", param);
+        }
+        EngineSolResponseModel esrm = EngineSolResponseModel.builder()
+            .medalType(param.getMedalType())
+            .solutions(solutions)
+            .totalSol(totalSol).build();
 
-        return ret;
+
+        return esrm;
     }
 }

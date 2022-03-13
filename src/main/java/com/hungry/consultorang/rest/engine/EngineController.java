@@ -43,11 +43,11 @@ public class EngineController {
     }
 
     @PostMapping("/getEngineSolList")
-    public ResponseEntity<RestResponse> getEngineSolList(@RequestBody List<EngineSolRequestModel> param)
+    public ResponseEntity<RestResponse> getEngineSolList(@RequestBody EngineSolRequestModel param)
         throws Exception{
         RestResponse res = new RestResponse();
 
-        List<EngineSolResponseModel> data = engineService.getEngineSolList(param);
+        EngineSolResponseModel data = engineService.getEngineSolList(param);
 
         return new ResponseEntity<RestResponse>(res.setSuccess(data), HttpStatus.OK);
     }
