@@ -16,8 +16,27 @@ public interface AccountService {
 
     public void updateMenuList(UpdateMenuListRequestModel param)
         throws Exception;
+
+    public void insertExpend(InsertExpendRequestModel param)
+        throws Exception;
+
     public AllCostResponseModel getAllCost(AllCostRequestModel param)
         throws Exception;
+
     public InsertCostResponseModel insertCost(InsertCostRequestModel param)
+        throws Exception;
+
+    public List<Object> getTotalHistoryList(TotalHistoryRequestModel param)
+        throws Exception;
+    public void insertEtcMenu(List<InsertEtcMenuRequestModel> param)
+        throws Exception;
+    public List<Object> getEtcMenuList(GetEtcMenuListRequestModel param)
+        throws Exception;
+    public void deleteEtcMenu(List<DeleteEtcMenuModel> param)
+        throws Exception;
+
+    void insertMemo(InsertMemoRequestModel param);
+
+    List<SaleExpendYmdModel> getSaleExpendYmd(GetSaleExpendYmdRequestModel param)
         throws Exception;
 }

@@ -157,6 +157,35 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "사업자번호중복체크",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"businessNum\" : \"2022031323\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/login/checkBusinessNum",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"login",
+								"checkBusinessNum"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -230,6 +259,95 @@
 							"path": [
 								"account",
 								"updateCatType"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "카테고리 타입 별 메뉴 리스트",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\":27,\r\n    \"saleYm\":\"202202\",\r\n    \"catType\":\"MT001\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/account/getCatMenuList",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"getCatMenuList"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "메뉴 단가 및 판매량 업데이트",
+					"request": {
+						"method": "POST",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "지출입력",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/account/insertExpend",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"insertExpend"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "히스토리 리스트 조회",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\":27,\r\n    \"startYmd\" : \"20211201\",\r\n    \"endYmd\" : \"20211231\",\r\n    \"historyType\" : \"\",\r\n    \"specificType\" : \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/account/getTotalHistoryList",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"getTotalHistoryList"
 							]
 						}
 					},

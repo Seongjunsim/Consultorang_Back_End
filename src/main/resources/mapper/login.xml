@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
@@ -64,5 +65,13 @@
         ]]>
     </select>
 
+    <select id="checkBusinessNum" resultType="int">
+        <![CDATA[
+            SELECT
+                COUNT(0) CNT
+            FROM BUSINESS
+            WHERE business_num = #{businessNum}
+        ]]>
+    </select>
 
 </mapper>

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
@@ -140,13 +141,8 @@
             FROM CATEGORY
             WHERE 1=1
             AND type_cd IS NULL
-        ]]>
-        <if test="catId != null and catId != ''">
-            AND cat_id = #{catId}
-        </if>
-        <if test="userId != null and userId != ''">
             AND user_id = #{userId}
-        </if>
+        ]]>
     </select>
     
     <select id="getCmMmOperand" resultType="CmMmOperandModel">
@@ -196,4 +192,205 @@
         AND cat_id = #{catId}
         AND menu_id = #{menuId}
     </update>
+
+    <insert id="insertExpend">
+        <![CDATA[
+            INSERT INTO EXPEND
+            (user_id, expend_ymd, expend_cost, expend_type, re_dt, up_dt)
+            VALUES
+            (#{userId}, #{expendYmd}, #{expendCost}, #{expendType}, NOW(), NOW())
+        ]]>
+    </insert>
+
+    <select id="getMenu" resultType="int">
+        <![CDATA[
+            SELECT user_id
+            FROM SALES
+            WHERE user_id = #{userId}
+            AND sale_ym = #{saleYm}
+            AND cat_id = #{catId}
+            AND menu_id = #{menuId}
+        ]]>
+    </select>
+
+    <insert id="insertHistory">
+        <![CDATA[
+            INSERT INTO SALES_HISTORY
+            (user_id, sale_ymd, sale_val, re_dt, up_dt)
+            VALUES
+            (#{userId}, #{saleYmd}, #{saleVal}, NOW(), NOW())
+        ]]>
+    </insert>
+
+    <update id="updateHistory">
+        <![CDATA[
+            UPDATE SALES_HISTORY
+            SET
+                sale_val = #{saleVal},
+                re_dt = NOW(),
+                up_dt = NOW()
+            WHERE 1=1
+                AND user_id = #{userId}
+                AND sale_ymd = #{saleYmd}
+        ]]>
+    </update>
+
+    <select id="getHistorySet" resultType="String">
+        <![CDATA[
+            SELECT
+                sale_ymd
+            FROM SALES_HISTORY
+            WHERE 1=1
+            AND user_id = #{userId}
+            AND sale_ymd BETWEEN #{startYmd} AND #{endYmd}
+        ]]>
+    </select>
+
+    <select id="getTotalSales" resultType="int">
+        SELECT
+            SUM(menu_cost * sale_quantity)
+        FROM
+            SALES
+        WHERE
+            user_id = #{userId}
+            AND sale_ym = #{saleYm}
+    </select>
+
+    <select id="getTotalHistoryList" resultType="TotalHistoryModel">
+        <![CDATA[
+            SELECT
+	            A.history_type,
+	            A.specific_type,
+	            A.type_nm,
+	            A.ymd,
+	            A.val
+            FROM (
+	            SELECT
+            		'SALE' AS history_type,
+            		'null' AS specific_type,
+            		'영업 수익' AS type_nm,
+            		sale_ymd AS ymd,
+            		sale_val AS val
+            	FROM SALES_HISTORY
+            	WHERE user_id=#{userId}
+            	AND sale_ymd BETWEEN #{startYmd} AND #{endYmd}
+            	UNION
+            	SELECT
+            	    'SALE' AS history_type,
+            	    'null' AS specific_type,
+            	    '기타 수익' AS type_nm,
+            	    sale_ymd AS ymd,
+                    SUM(menu_sale) AS val
+                FROM ETC_SALES
+                WHERE user_id=#{userId}
+            	AND sale_ymd BETWEEN #{startYmd} AND #{endYmd}
+            	GROUP BY sale_ymd
+            	UNION
+            	SELECT
+            		'EXPEND' AS history_type,
+            		B.expend_type AS specific_type,
+            		C.code_nm AS type_nm,
+            		B.expend_ymd AS ymd,
+            		B.expend_cost AS val
+            	FROM EXPEND B
+            	JOIN CODES C ON B.expend_type = C.cd
+            	WHERE user_id=#{userId}
+            	AND expend_ymd BETWEEN #{startYmd} AND #{endYmd}
+            	UNION
+            	SELECT
+            	    'MEMO' AS history_type,
+            	    'null' AS specific_type,
+            	    'MEMO' AS type_nm,
+            	    memo_ymd AS ymd,
+            	    memo_str AS val
+            	FROM MEMOS
+            	WHERE user_id=#{userId}
+            	AND memo_ymd BETWEEN #{startYmd} AND #{endYmd}
+            ) A
+            WHERE 1=1
+        ]]>
+        <if test="historyType!=null and historyType != '' and historyType!='TOTAL'">
+            AND A.history_type = #{historyType}
+        </if>
+        <if test="specificType!=null and specificType != ''">
+            AND A.specific_type = #{specificType}
+        </if>
+        <![CDATA[
+            ORDER BY ymd
+        ]]>
+
+    </select>
+
+    <insert id="insertEtcMenu">
+        <![CDATA[
+            INSERT INTO ETC_SALES
+            (user_id, sale_ymd, menu_nm, menu_sale, reg_dt, up_dt)
+            VALUES
+            (#{userId}, #{saleYmd}, #{menuNm}, #{menuSale}, NOW(), NOW())
+        ]]>
+    </insert>
+
+    <select id="getEtcMenu" resultType="EtcMenuModel">
+        <![CDATA[
+            SELECT
+                etc_id,
+                sale_ymd,
+                menu_nm,
+                menu_sale
+            FROM
+                ETC_SALES
+            WHERE 1=1
+            AND user_id=#{userId}
+            AND sale_ymd BETWEEN #{startYmd} AND #{endYmd}
+        ]]>
+    </select>
+
+    <delete id="deleteEtcMenu">
+        <![CDATA[
+            DELETE FROM ETC_SALES
+            WHERE etc_id = #{etcId}
+        ]]>
+    </delete>
+
+    <insert id="insertMemo">
+        <![CDATA[
+            INSERT INTO MEMOS
+            (user_id, memo_ymd, memo_str, reg_dt, up_dt)
+            VALUES
+            (#{userId}, #{memoYmd}, #{memoStr}, NOW(), NOW())
+        ]]>
+    </insert>
+
+    <select id="getSaleYmd" resultType="String">
+        <![CDATA[
+            SELECT
+                A.ymd
+            FROM (
+                SELECT
+                    sale_ymd AS ymd
+                FROM SALES_HISTORY
+                WHERE user_id = #{userId}
+                    AND sale_ymd BETWEEN #{startYmd} AND #{endYmd}
+                UNION
+                SELECT
+                    sale_ymd AS ymd
+                FROM ETC_SALES
+                WHERE user_id = #{userId}
+                    AND sale_ymd BETWEEN #{startYmd} AND #{endYmd}
+            ) A
+            GROUP BY A.ymd
+        ]]>
+    </select>
+
+    <select id="getExpendYmd" resultType="String">
+        <![CDATA[
+            SELECT
+                expend_ymd AS ymd
+            FROM EXPEND
+            WHERE user_id = #{userId}
+            AND expend_ymd BETWEEN #{startYmd} AND #{endYmd}
+            GROUP BY expend_ymd
+        ]]>
+    </select>
+
 </mapper>

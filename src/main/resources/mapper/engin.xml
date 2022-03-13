@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
@@ -16,7 +17,7 @@
         ]]>
     </select>
 
-    <select id="getCatMenu" resultType="MenuModel">
+    <select id="getCatMenu" resultType="EngineMenuModel">
         <![CDATA[
             SELECT
             	A.menu_id,
@@ -29,7 +30,7 @@
             	A.menu_engine_cd
             FROM SALES A
             INNER JOIN MENUS B
-            ON A.menu_id = B.menu_id
+            ON A.menu_id = B.menu_id AND A.user_id = B.user_id
             WHERE A.user_id = #{userId}
                 AND A.sale_ym = #{saleYm}
                 AND A.cat_id = #{catId}
@@ -101,5 +102,18 @@
         <if test="catType != null and catType !=''">
             AND type_cd = #{catType}
         </if>
+    </select>
+
+    <select id="getEngineSolList" resultType="SolutionModel">
+        <![CDATA[
+            SELECT
+                B.sol_title,
+                B.sol_content,
+                B.img_id
+            FROM MONTHLY_SOL A
+            INNER JOIN ENGINE_SOL B
+            ON A.medal_type = B.medal_type AND A.sol_id = B.sol_id
+            WHERE A.medal_type = #{medalType}
+        ]]>
     </select>
 </mapper>

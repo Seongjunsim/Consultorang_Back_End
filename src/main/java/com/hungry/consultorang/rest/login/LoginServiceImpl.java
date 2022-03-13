@@ -59,7 +59,6 @@ public class LoginServiceImpl implements LoginService{
 
 
     @Override
-    @Transactional(rollbackFor = LoginException.class)
     public HashMap<String, Object> checkEmail(HashMap<String, String> param) throws Exception {
         HashMap<String, Object> ret = new HashMap<>();
         int cnt = (int) commonDao.selectOne("login.checkEmail", param);
@@ -67,5 +66,12 @@ public class LoginServiceImpl implements LoginService{
         boolean is = cnt==0;
         ret.put("isEnableEmail", is);
         return ret;
+    }
+
+    @Override
+    public boolean checkBusinessNum(HashMap<String, String> param) throws Exception {
+        HashMap<String, Object> ret = new HashMap<>();
+        int cnt = (int) commonDao.selectOne("login.checkBusinessNum", param);
+        return cnt==0;
     }
 }

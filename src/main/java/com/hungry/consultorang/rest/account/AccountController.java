@@ -57,22 +57,63 @@ public class AccountController {
         return new ResponseEntity<RestResponse>(res.setSuccess(), HttpStatus.OK);
     }
 
-    @PostMapping("/allcost")
-    public ResponseEntity<RestResponse> getAllCost(@RequestBody AllCostRequestModel param) throws Exception{
-        RestResponse response = new RestResponse();
-
-        AllCostResponseModel resData = accountService.getAllCost(param);
-
-        return new ResponseEntity<RestResponse>(response.setSuccess(resData), HttpStatus.OK);
+    @PostMapping("/insertExpend")
+    public ResponseEntity<RestResponse> insertExpend(@RequestBody InsertExpendRequestModel param)
+        throws Exception{
+        RestResponse res = new RestResponse();
+        accountService.insertExpend(param);
+        return new ResponseEntity<RestResponse>(res.setSuccess(), HttpStatus.OK);
     }
 
-    @PostMapping("/all")
-    public ResponseEntity<RestResponse> insertCost(@RequestBody InsertCostRequestModel param) throws Exception{
-        RestResponse response = new RestResponse();
+    @PostMapping("/getTotalHistoryList")
+    public ResponseEntity<RestResponse> getTotalHistoryList(@RequestBody TotalHistoryRequestModel param)
+        throws Exception{
+        RestResponse res = new RestResponse();
+        List<Object> data = accountService.getTotalHistoryList(param);
+        return new ResponseEntity<RestResponse>(res.setSuccess(data), HttpStatus.OK);
+    }
 
-        InsertCostResponseModel resData = accountService.insertCost(param);
+    @PostMapping("/insertEtcMenu")
+    public ResponseEntity<RestResponse> insertEtcMenu(@RequestBody List<InsertEtcMenuRequestModel> param)
+        throws Exception{
+        RestResponse res = new RestResponse();
+        accountService.insertEtcMenu(param);
+        return new ResponseEntity<RestResponse>(res.setSuccess(), HttpStatus.OK);
+    }
 
-        return new ResponseEntity<RestResponse>(response.setSuccess(resData), HttpStatus.OK);
+    @PostMapping("/getEtcMenuList")
+    public ResponseEntity<RestResponse> getEtcMenuList(@RequestBody GetEtcMenuListRequestModel param)
+        throws Exception{
+        RestResponse res = new RestResponse();
+        List<Object> data = accountService.getEtcMenuList(param);
+
+        return new ResponseEntity<RestResponse>(res.setSuccess(data), HttpStatus.OK);
+    }
+
+    @PostMapping("/deleteEtcMenu")
+    public ResponseEntity<RestResponse> deleteEtcMenu(@RequestBody List<DeleteEtcMenuModel> param)
+        throws Exception{
+        RestResponse res = new RestResponse();
+        accountService.deleteEtcMenu(param);
+        return new ResponseEntity<RestResponse>(res.setSuccess(), HttpStatus.OK);
+    }
+
+    @PostMapping("/insertMemo")
+    public ResponseEntity<RestResponse> insertMemo(@RequestBody InsertMemoRequestModel param)
+        throws Exception{
+        RestResponse res = new RestResponse();
+
+        accountService.insertMemo(param);
+        return new ResponseEntity<RestResponse>(res.setSuccess(), HttpStatus.OK);
+    }
+
+    @PostMapping("/getSaleExpendYmd")
+    public ResponseEntity<RestResponse> getSaleExpendYmd(@RequestBody GetSaleExpendYmdRequestModel param)
+        throws Exception{
+        RestResponse res = new RestResponse();
+
+        List<SaleExpendYmdModel> data = accountService.getSaleExpendYmd(param);
+        return new ResponseEntity<RestResponse>(res.setSuccess(data), HttpStatus.OK);
     }
 
 }

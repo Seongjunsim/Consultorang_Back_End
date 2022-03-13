@@ -51,4 +51,13 @@ public class LoginController {
         HashMap<String, Object> ret = loginService.checkEmail(param);
         return new ResponseEntity<RestResponse>(res.setSuccess(ret), HttpStatus.OK);
     }
+
+    @PostMapping("/checkBusinessNum")
+    public ResponseEntity<RestResponse> checkBusinessNum
+        (@RequestBody HashMap<String, String> param) throws Exception{
+        RestResponse res = new RestResponse();
+        boolean ret = loginService.checkBusinessNum(param);
+
+        return new ResponseEntity<RestResponse>(res.setSuccess(ret), HttpStatus.OK);
+    }
 }
