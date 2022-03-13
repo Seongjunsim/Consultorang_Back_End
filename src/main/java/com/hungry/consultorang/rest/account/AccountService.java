@@ -36,4 +36,7 @@ public interface AccountService {
         throws Exception;
 
     void insertMemo(InsertMemoRequestModel param);
+
+    List<SaleExpendYmdModel> getSaleExpendYmd(GetSaleExpendYmdRequestModel param)
+        throws Exception;
 }

@@ -107,4 +107,13 @@ public class AccountController {
         return new ResponseEntity<RestResponse>(res.setSuccess(), HttpStatus.OK);
     }
 
+    @PostMapping("/getSaleExpendYmd")
+    public ResponseEntity<RestResponse> getSaleExpendYmd(@RequestBody GetSaleExpendYmdRequestModel param)
+        throws Exception{
+        RestResponse res = new RestResponse();
+
+        List<SaleExpendYmdModel> data = accountService.getSaleExpendYmd(param);
+        return new ResponseEntity<RestResponse>(res.setSuccess(data), HttpStatus.OK);
+    }
+
 }

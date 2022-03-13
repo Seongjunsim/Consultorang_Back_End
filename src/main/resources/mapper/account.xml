@@ -361,5 +361,36 @@
         ]]>
     </insert>
 
+    <select id="getSaleYmd" resultType="String">
+        <![CDATA[
+            SELECT
+                A.ymd
+            FROM (
+                SELECT
+                    sale_ymd AS ymd
+                FROM SALES_HISTORY
+                WHERE user_id = #{userId}
+                    AND sale_ymd BETWEEN #{startYmd} AND #{endYmd}
+                UNION
+                SELECT
+                    sale_ymd AS ymd
+                FROM ETC_SALES
+                WHERE user_id = #{userId}
+                    AND sale_ymd BETWEEN #{startYmd} AND #{endYmd}
+            ) A
+            GROUP BY A.ymd
+        ]]>
+    </select>
+
+    <select id="getExpendYmd" resultType="String">
+        <![CDATA[
+            SELECT
+                expend_ymd AS ymd
+            FROM EXPEND
+            WHERE user_id = #{userId}
+            AND expend_ymd BETWEEN #{startYmd} AND #{endYmd}
+            GROUP BY expend_ymd
+        ]]>
+    </select>
 
 </mapper>
