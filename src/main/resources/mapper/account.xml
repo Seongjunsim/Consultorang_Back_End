@@ -393,4 +393,20 @@
         ]]>
     </select>
 
+    <select id="getTotalEtcSales" resultType="int">
+        SELECT
+            SUM(menu_sale)
+        FROM ETC_SALES
+        WHERE user_id = #{userId}
+        AND sale_ymd BETWEEN #{startYmd} AND #{endYmd}
+    </select>
+
+    <select id = "getTotalExpend" resultType="int">
+        SELECT
+            SUM(expend_cost)
+        FROM EXPEND
+        WHERE user_id = #{userId}
+        AND expend_ymd BETWEEN #{startYmd} AND #{endYmd}
+    </select>
+
 </mapper>

@@ -325,4 +325,49 @@ public class AccountServiceImpl implements AccountService{
 
         return list;
     }
+
+    @Override
+    public GetCurPrevSaleExpendResponseModel getCurPrevSaleExpend(GetCurPrevSaleExpendRequestModel param) throws Exception {
+
+        String currentYm = param.getYm();
+        HashMap<String, Object> reqParam = new HashMap<>();
+        //current
+        reqParam.put("userId", param.getUserId());
+        reqParam.put("saleYm", param.getYm());
+        reqParam.put("startYmd", param.getYm()+"00");
+        reqParam.put("endYmd", param.getYm()+"99");
+        Object o = commonDao.selectOne("getTotalSales", reqParam);
+        int sales = o==null?0:(int)o;
+        o = commonDao.selectOne("getTotalEtcSales", reqParam);
+        sales+=o==null?0:(int)o;
+        o = commonDao.selectOne("getTotalExpend", reqParam);
+        int expends = o==null?0:(int)o;
+        SaleExpendModel cur = new SaleExpendModel();
+        cur.setTotalSale(sales); cur.setTotalExpend(expends);
+
+        //prev
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMM");
+        Date d = format.parse(currentYm);
+        Calendar c = Calendar.getInstance();
+        c.setTime(d);
+        c.set(Calendar.MONTH, -1);
+        String prevYm = format.format(c.getTime());
+        reqParam.put("saleYm", prevYm);
+        reqParam.put("startYmd", prevYm+"00");
+        reqParam.put("endYmd", prevYm+"99");
+        o = commonDao.selectOne("getTotalSales", reqParam);
+        sales = o==null?0:(int)o;
+        o = commonDao.selectOne("getTotalEtcSales", reqParam);
+        sales+=o==null?0:(int)o;
+        o = commonDao.selectOne("getTotalExpend", reqParam);
+        expends = o==null?0:(int)o;
+        SaleExpendModel prev = new SaleExpendModel();
+        prev.setTotalSale(sales); prev.setTotalExpend(expends);
+
+        GetCurPrevSaleExpendResponseModel ret = new GetCurPrevSaleExpendResponseModel();
+        ret.setCur(cur);
+        ret.setPrev(prev);
+
+        return ret;
+    }
 }

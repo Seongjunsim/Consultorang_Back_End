@@ -116,4 +116,13 @@ public class AccountController {
         return new ResponseEntity<RestResponse>(res.setSuccess(data), HttpStatus.OK);
     }
 
+    @PostMapping("/getCurPrevSaleExpend")
+    public ResponseEntity<RestResponse> getCurPrevSaleExpend(@RequestBody GetCurPrevSaleExpendRequestModel param)
+        throws Exception{
+        RestResponse res = new RestResponse();
+
+        GetCurPrevSaleExpendResponseModel data = accountService.getCurPrevSaleExpend(param);
+        return new ResponseEntity<RestResponse>(res.setSuccess(data),HttpStatus.OK);
+
+    }
 }
