@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="state">
+
+    <insert id="insertPlCompareData">
+        <![CDATA[
+            INSERT INTO PL_COMPARE_TBL
+            (st_cd, ss_cd, total_sale, food_cost, employee_cost,
+             hire_cost, tax_cost, family_employee_cost, employer_cost,
+             etc_cost, sale_profit)
+            VALUES
+            (#{stCd}, #{ssCd}, #{totalSale}, #{foodCost}, #{employeeCost},
+             #{hireCost}, #{taxCost}, #{familyEmployeeCost}, #{employerCost},
+             #{etcCost}, #{saleProfit}
+            )
+        ]]>
+    </insert>
+
+    <select id="getBusinessCd" resultType="HashMap">
+        SELECT
+            business_type AS businessType,
+            business_ingre AS businessIngre,
+            business_size AS businessSize
+        FROM BUSINESS
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="getCompareData" resultType="SIHModel">
+        <![CDATA[
+            SELECT
+                total_sale*10000 AS total_sale,
+                food_cost*10000 AS food_cost,
+                (employee_cost + hire_cost + family_employee_cost+employer_cost)*10000 AS human_cost
+            FROM PL_COMPARE_TBL
+            WHERE 1=1
+            AND st_cd = #{stCd}
+        ]]>
+        <if test="stCd=='ST001'">
+            AND ss_cd = #{ssCd}
+        </if>
+    </select>
+
+</mapper>
