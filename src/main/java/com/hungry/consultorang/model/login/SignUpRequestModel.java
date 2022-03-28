@@ -21,8 +21,9 @@ public class SignUpRequestModel extends ParentModel {
     private String businessType;
     private String businessIngre;
     private String businessCookway;
-    private String businessAlcohol;
-    private String businessAlready;
+    private int businessAlready;
     private int businessStaff;
-    private String businessHours;
+    private String businessSize;
+    private int businessStart;
+    private int businessEnd;
 }

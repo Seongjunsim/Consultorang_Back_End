@@ -50,10 +50,7 @@ public class LoginServiceImpl implements LoginService{
         param.setUserId(userId);
         commonDao.insert("login.insertBusiness", param);
 
-        SignUpResponseModel ret = SignUpResponseModel.builder()
-            .businessName(param.getBusinessName())
-            .pw(param.getPw())
-            .email(param.getEmail()).build();
+        SignUpResponseModel ret = (SignUpResponseModel) commonDao.selectOne("getUserAndBusiness", param);
         return ret;
     }
 
