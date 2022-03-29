@@ -92,7 +92,8 @@
             	B.business_staff,
             	B.business_size,
             	B.business_start,
-            	B.business_end
+            	B.business_end,
+            	'' AS token
             FROM USER A
             INNER JOIN BUSINESS B ON A.user_id = B.user_id
             WHERE A.user_id = #{userId}

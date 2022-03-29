@@ -25,4 +25,5 @@ public class SignUpResponseModel extends ParentModel {
     private String businessSize;
     private int businessStart;
     private int businessEnd;
+    private String token;
 }
