@@ -39,4 +39,7 @@ public interface AccountService {
 
     List<SaleExpendYmdModel> getSaleExpendYmd(GetSaleExpendYmdRequestModel param)
         throws Exception;
+
+    GetCurPrevSaleExpendResponseModel getCurPrevSaleExpend(GetCurPrevSaleExpendRequestModel param)
+        throws Exception;
 }

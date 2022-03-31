@@ -22,8 +22,8 @@
         <![CDATA[
         INSERT INTO BUSINESS
             (user_id, business_num, business_name, business_type, business_ingre,
-            business_cookway, business_alcohol, business_already, business_staff, business_hours,
-            reg_dt)
+            business_cookway, business_already, business_staff, business_size,
+            business_start, business_end, reg_dt)
             VALUE(
                 #{userId},
                 #{businessNum},
@@ -31,10 +31,11 @@
                 #{businessType},
                 #{businessIngre},
                 #{businessCookway},
-                #{businessAlcohol},
                 #{businessAlready},
                 #{businessStaff},
-                #{businessHours},
+                #{businessSize},
+                #{businessStart},
+                #{businessEnd},
                 NOW()
             )
             ]]>
@@ -71,6 +72,31 @@
                 COUNT(0) CNT
             FROM BUSINESS
             WHERE business_num = #{businessNum}
+        ]]>
+    </select>
+
+    <select id="getUserAndBusiness" resultType="SignUpResponseModel">
+        <![CDATA[
+            SELECT
+            	A.user_id,
+            	A.email,
+            	A.pw,
+            	A.phone,
+            	A.service_yn,
+            	B.business_num,
+            	B.business_name,
+            	B.business_type,
+            	B.business_ingre,
+            	B.business_cookway,
+            	B.business_already,
+            	B.business_staff,
+            	B.business_size,
+            	B.business_start,
+            	B.business_end,
+            	'' AS token
+            FROM USER A
+            INNER JOIN BUSINESS B ON A.user_id = B.user_id
+            WHERE A.user_id = #{userId}
         ]]>
     </select>
 

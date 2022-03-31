@@ -2,7 +2,6 @@ package com.hungry.consultorang.rest.login;
 
 import com.hungry.consultorang.common.response.RestResponse;
 import com.hungry.consultorang.model.login.SignInRequestModel;
-import com.hungry.consultorang.model.login.SignInResponseModel;
 import com.hungry.consultorang.model.login.SignUpRequestModel;
 import com.hungry.consultorang.model.login.SignUpResponseModel;
 import org.springframework.http.HttpStatus;
@@ -27,7 +26,7 @@ public class LoginController {
     public ResponseEntity<RestResponse> signIn(@RequestBody SignInRequestModel param) throws Exception{
         RestResponse response = new RestResponse();
 
-        SignInResponseModel resData = loginService.signIn(param);
+        SignUpResponseModel resData = loginService.signIn(param);
 
         return new ResponseEntity<RestResponse>(response.setSuccess(resData), HttpStatus.OK);
     }

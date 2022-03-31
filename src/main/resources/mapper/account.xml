@@ -248,12 +248,15 @@
 
     <select id="getTotalSales" resultType="int">
         SELECT
-            SUM(menu_cost * sale_quantity)
+            IFNULL(A.sale, 0) AS sale
+        FROM
+        (SELECT
+            SUM(menu_cost * sale_quantity) AS sale
         FROM
             SALES
         WHERE
             user_id = #{userId}
-            AND sale_ym = #{saleYm}
+            AND sale_ym = #{saleYm}) A
     </select>
 
     <select id="getTotalHistoryList" resultType="TotalHistoryModel">
@@ -391,6 +394,31 @@
             AND expend_ymd BETWEEN #{startYmd} AND #{endYmd}
             GROUP BY expend_ymd
         ]]>
+    </select>
+
+    <select id="getTotalEtcSales" resultType="int">
+        SELECT
+            IFNULL(A.menu_sale,0)
+        FROM (SELECT
+            SUM(menu_sale) AS menu_sale
+        FROM ETC_SALES
+        WHERE user_id = #{userId}
+        AND sale_ymd BETWEEN #{startYmd} AND #{endYmd}) A
+    </select>
+
+    <select id = "getTotalExpend" resultType="int">
+        SELECT
+            IFNULL(A.expend_cost, 0)
+        FROM
+        (SELECT
+            SUM(expend_cost) AS expend_cost
+        FROM EXPEND
+        WHERE user_id = #{userId}
+        AND expend_ymd BETWEEN #{startYmd} AND #{endYmd}
+        <if test="expendType!=null and expendType!=''">
+            AND expend_type = #{expendType}
+        </if>
+        ) A
     </select>
 
 </mapper>

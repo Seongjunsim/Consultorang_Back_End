@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.lang.reflect.Field;
+import java.util.HashMap;
+
 // 가장 상위 level의 모델
 
 @Data
