@@ -22,7 +22,7 @@ public class LoginServiceImpl implements LoginService{
     }
 
     @Override
-    public SignInResponseModel signIn(SignInRequestModel param) throws Exception{
+    public SignUpResponseModel signIn(SignInRequestModel param) throws Exception{
         UserModel user = (UserModel) commonDao.selectOne("login.getUser", param);
         if(user==null){
             throw new LoginException("등록되지 않은 이메일입니다.");
@@ -30,13 +30,8 @@ public class LoginServiceImpl implements LoginService{
         if(!user.getPw().equals(param.getPw())) throw new LoginException("비밀번호가 틀렸습니다.");
 
         String token = jwtTokenProvider.createToken(user);
-        SignInResponseModel ret = SignInResponseModel.builder()
-            .pw(user.getPw())
-            .userId(user.getUserId())
-            .email(user.getEmail())
-            .businessName(user.getBusinessName())
-            .token(token)
-            .build();
+        SignUpResponseModel ret = (SignUpResponseModel) commonDao.selectOne("login.getUserAndBusiness", user);
+        ret.setToken(token);
         return ret;
     }
 
@@ -50,10 +45,7 @@ public class LoginServiceImpl implements LoginService{
         param.setUserId(userId);
         commonDao.insert("login.insertBusiness", param);
 
-        SignUpResponseModel ret = SignUpResponseModel.builder()
-            .businessName(param.getBusinessName())
-            .pw(param.getPw())
-            .email(param.getEmail()).build();
+        SignUpResponseModel ret = (SignUpResponseModel) commonDao.selectOne("getUserAndBusiness", param);
         return ret;
     }
 
