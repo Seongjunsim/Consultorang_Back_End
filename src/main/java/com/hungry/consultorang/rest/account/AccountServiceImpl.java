@@ -237,8 +237,10 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
-    public void insertExpend(InsertExpendRequestModel param) throws Exception {
-        commonDao.insert("account.insertExpend", param);
+    public void insertExpend(List<InsertExpendRequestModel> param) throws Exception {
+        for(InsertExpendRequestModel model : param)
+            commonDao.batchInsert("account.insertExpend", model);
+        commonDao.flushStatements();
     }
 
     @Override

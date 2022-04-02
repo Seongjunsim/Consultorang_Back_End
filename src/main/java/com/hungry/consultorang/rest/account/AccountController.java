@@ -58,7 +58,7 @@ public class AccountController {
     }
 
     @PostMapping("/insertExpend")
-    public ResponseEntity<RestResponse> insertExpend(@RequestBody InsertExpendRequestModel param)
+    public ResponseEntity<RestResponse> insertExpend(@RequestBody List<InsertExpendRequestModel> param)
         throws Exception{
         RestResponse res = new RestResponse();
         accountService.insertExpend(param);
