@@ -17,7 +17,7 @@ public interface AccountService {
     public void updateMenuList(UpdateMenuListRequestModel param)
         throws Exception;
 
-    public void insertExpend(InsertExpendRequestModel param)
+    public void insertExpend(List<InsertExpendRequestModel> param)
         throws Exception;
 
     public AllCostResponseModel getAllCost(AllCostRequestModel param)
