@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 @Repository
@@ -31,8 +32,15 @@ public class CommonDao {
     public List<Object> selectList(String statement, Object param){
         return sqlSession.selectList(statement, param);
     }
-    public List<ParentModel> selectModelList(String statement, Object param){
-        return sqlSession.selectList(statement, param);
+
+    public <T> List<T> selectModelList(String statement, Object param){
+        List<Object> list = selectList(statement, param);
+
+        List<T> ret = new LinkedList<>();
+        for(Object o : list){
+            ret.add((T) o);
+        }
+        return ret;
     }
 
     public int update(String statement, Object param){
@@ -55,8 +63,12 @@ public class CommonDao {
         return sqlSession.delete(statement, param);
     }
 
+
     public int batchDelete(String statement, Object param){
         return batchSqlSession.delete(statement, param);
+    }
+    public int batchDelete(String statement){
+        return batchSqlSession.delete(statement);
     }
     public void flushStatements(){
         this.batchSqlSession.flushStatements();

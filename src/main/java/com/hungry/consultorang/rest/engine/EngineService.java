@@ -18,4 +18,5 @@ public interface EngineService {
     public EngineSolResponseModel getEngineSolList(EngineSolRequestModel param)
         throws Exception;
 
+    void changeMonthlyEngineSolution() throws Exception;
 }
