@@ -97,4 +97,27 @@ public class EngineServiceImpl implements EngineService{
 
         return esrm;
     }
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void changeMonthlyEngineSolution() throws Exception {
+
+        commonDao.batchDelete("deleteMonthlySol");
+        commonDao.flushStatements();
+        HashMap<String, Object> req = new HashMap<>();
+        for(int medalType=1; medalType<=3 ;medalType++){
+
+            req.put("medalType", medalType);
+
+            List<MonthlySolModel> l = commonDao.<MonthlySolModel>selectModelList("getEngineSolListByType",req);
+
+            for(int i=0;i<=1; i++){
+                int random = (int)(Math.random()*100);
+                int idx = random % l.size();
+                commonDao.batchInsert("insertMonthlySol", l.get(idx));
+                l.remove(idx);
+            }
+        }
+        commonDao.flushStatements();
+        return;
+    }
 }

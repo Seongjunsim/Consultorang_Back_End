@@ -116,4 +116,30 @@
             WHERE A.medal_type = #{medalType}
         ]]>
     </select>
+
+    <delete id="deleteMonthlySol">
+        <![CDATA[
+            TRUNCATE MONTHLY_SOL
+        ]]>
+    </delete>
+
+
+    <select id="getEngineSolListByType" resultType="MonthlySolModel">
+        <![CDATA[
+            SELECT
+                medal_type,
+                sol_id
+            FROM ENGINE_SOL
+            WHERE medal_type = #{medalType}
+        ]]>
+    </select>
+
+    <insert id="insertMonthlySol">
+        <![CDATA[
+            INSERT INTO MONTHLY_SOL
+            (medal_type, sol_id)
+            VALUES
+            (#{medalType}, #{solId})
+        ]]>
+    </insert>
 </mapper>
