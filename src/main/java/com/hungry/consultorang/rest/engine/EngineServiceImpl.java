@@ -80,14 +80,24 @@ public class EngineServiceImpl implements EngineService{
         String totalSol="";
         switch (param.getMedalType()){
             case 1:
-                totalSol = param.isHasMenu() ? solutionSet.getGoldTotal() : solutionSet.getGoldNo();
-                break; case 2: totalSol = param.isHasMenu() ? solutionSet.getSilverTotal() : solutionSet.getSilverNo();
-                break; case 3: totalSol = param.isHasMenu() ? solutionSet.getBronzeTotal() : solutionSet.getBronzeNo();
+                totalSol =  solutionSet.getGoldTotal();
+                break; case 2: totalSol = solutionSet.getSilverTotal();
+                break; case 3: totalSol = solutionSet.getBronzeTotal();
                 break;
         }
         List<Object> solutions = new LinkedList<>();
         if(param.isHasMenu()){
             solutions = commonDao.selectList("engine.getEngineSolList", param);
+        }else{
+            String solContent = "";
+            if(param.getMedalType()==1)solContent=solutionSet.getGoldNo();
+            else if(param.getMedalType()==2)solContent=solutionSet.getSilverNo();
+            else if(param.getMedalType()==3)solContent=solutionSet.getBronzeNo();
+            SolutionModel solModel = new SolutionModel();
+            solModel.setSolTitle("");
+            solModel.setSolContent(solContent);
+            solModel.setImgId(0);
+            solutions.add(solModel);
         }
         EngineSolResponseModel esrm = EngineSolResponseModel.builder()
             .medalType(param.getMedalType())
