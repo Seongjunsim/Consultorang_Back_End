@@ -59,4 +59,12 @@ public class LoginController {
 
         return new ResponseEntity<RestResponse>(res.setSuccess(ret), HttpStatus.OK);
     }
+
+    @PostMapping("/getUserInfo")
+    public ResponseEntity<RestResponse> getUserInfo(@RequestBody HashMap<String, String> param)
+        throws Exception{
+        RestResponse res = new RestResponse();
+        SignUpResponseModel ret = loginService.getUserInfo(param);
+        return new ResponseEntity<RestResponse>(res.setSuccess(ret), HttpStatus.OK);
+    }
 }

@@ -32,6 +32,12 @@ public class LoginServiceImpl implements LoginService{
 
         String token = jwtTokenProvider.createToken(user);
         SignUpResponseModel ret = (SignUpResponseModel) commonDao.selectOne("login.getUserAndBusiness", user);
+
+        int businessId = (int) commonDao.selectOne("login.getBusinessId", ret);
+        SignUpHolidayModel model = new SignUpHolidayModel();
+        model.setBusinessId(businessId);
+        List<String> holiday =  commonDao.selectModelList("login.getHoliday", model);
+        ret.setBusinessHoliday(holiday);
         ret.setToken(token);
         return ret;
     }
@@ -75,4 +81,17 @@ public class LoginServiceImpl implements LoginService{
         int cnt = (int) commonDao.selectOne("login.checkBusinessNum", param);
         return cnt==0;
     }
+
+    @Override
+    public SignUpResponseModel getUserInfo(HashMap<String, String> param) throws Exception {
+        SignUpResponseModel ret = (SignUpResponseModel) commonDao.selectOne("login.getUserAndBusiness", param);
+        int businessId = (int) commonDao.selectOne("login.getBusinessId", ret);
+        SignUpHolidayModel model = new SignUpHolidayModel();
+        model.setBusinessId(businessId);
+        List<String> holiday =  commonDao.selectModelList("login.getHoliday", model);
+        ret.setBusinessHoliday(holiday);
+        return ret;
+    }
+
+
 }
