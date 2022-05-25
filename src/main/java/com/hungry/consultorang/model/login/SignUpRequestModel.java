@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -26,4 +27,5 @@ public class SignUpRequestModel extends ParentModel {
     private String businessSize;
     private int businessStart;
     private int businessEnd;
+    private List<String> businessHoliday;
 }

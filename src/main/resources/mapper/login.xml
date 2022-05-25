@@ -93,6 +93,7 @@
             	B.business_size,
             	B.business_start,
             	B.business_end,
+            	NULL AS businessHoliday,
             	'' AS token
             FROM USER A
             INNER JOIN BUSINESS B ON A.user_id = B.user_id
@@ -100,4 +101,32 @@
         ]]>
     </select>
 
+    <select id="getBusinessId" resultType="int">
+        <![CDATA[
+            SELECT
+                business_id
+            FROM BUSINESS
+            WHERE 1=1
+            AND user_id = #{userId}
+            AND business_num = #{businessNum}
+        ]]>
+    </select>
+    <insert id="insertBusinessHoliday">
+        <![CDATA[
+            INSERT INTO BUSINESS_HOLIDAY
+            (business_id, holiday_code)
+            VALUE
+            (#{businessId}, #{holidayCode})
+        ]]>
+    </insert>
+    <select id="getHoliday" resultType="String">
+        <![CDATA[
+            SELECT
+                B.code_nm
+            FROM BUSINESS_HOLIDAY A
+            INNER JOIN CODES B
+            ON A.holiday_code = B.cd
+            WHERE A.business_id = #{businessId}
+        ]]>
+    </select>
 </mapper>

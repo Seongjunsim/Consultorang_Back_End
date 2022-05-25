@@ -196,9 +196,9 @@
     <insert id="insertExpend">
         <![CDATA[
             INSERT INTO EXPEND
-            (user_id, expend_ymd, expend_cost, expend_type, re_dt, up_dt)
+            (user_id, expend_ymd, expend_cost, expend_type, expend_who,re_dt, up_dt)
             VALUES
-            (#{userId}, #{expendYmd}, #{expendCost}, #{expendType}, NOW(), NOW())
+            (#{userId}, #{expendYmd}, #{expendCost}, #{expendType}, #{expendWho},NOW(), NOW())
         ]]>
     </insert>
 
