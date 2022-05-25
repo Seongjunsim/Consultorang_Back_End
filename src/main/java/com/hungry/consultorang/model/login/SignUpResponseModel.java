@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
 @Builder
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -25,5 +27,6 @@ public class SignUpResponseModel extends ParentModel {
     private String businessSize;
     private int businessStart;
     private int businessEnd;
+    private List<String> businessHoliday;
     private String token;
 }

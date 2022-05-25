@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
 
 @Service
 public class LoginServiceImpl implements LoginService{
@@ -35,17 +36,25 @@ public class LoginServiceImpl implements LoginService{
         return ret;
     }
 
-    //오 진짜 ㅅ신기 이렇게 하면 롤백될때 특정 예외로 뱉음
     @Transactional(rollbackFor = LoginException.class)
-    //batch 는 중간 저장 아예 다 롤백아니고 끊어서
     @Override
     public SignUpResponseModel signUp(SignUpRequestModel param) throws Exception {
         commonDao.insert("login.insertUser", param);
         int userId = (int) commonDao.selectOne("login.getUserId", param);
         param.setUserId(userId);
-        commonDao.insert("login.insertBusiness", param);
 
+        commonDao.insert("login.insertBusiness", param);
+        SignUpHolidayModel model = new SignUpHolidayModel();
+        int businessId = (int) commonDao.selectOne("login.getBusinessId", param);
+        model.setBusinessId(businessId);
+        for(String h : param.getBusinessHoliday()){
+            model.setHolidayCode(h);
+            commonDao.batchInsert("login.insertBusinessHoliday", model);
+        }
+        commonDao.flushStatements();
         SignUpResponseModel ret = (SignUpResponseModel) commonDao.selectOne("getUserAndBusiness", param);
+        List<String> holiday =  commonDao.selectModelList("login.getHoliday", model);
+        ret.setBusinessHoliday(holiday);
         return ret;
     }
 
