@@ -11,4 +11,5 @@ public class InsertExpendRequestModel extends ParentModel {
     String expendYmd;
     String expendType;
     int expendCost;
+    String expendWho;
 }
