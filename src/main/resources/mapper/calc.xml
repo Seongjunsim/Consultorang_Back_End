@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="calc">
+    <delete id="deleteHistory">
+        <![CDATA[
+            DELETE FROM CALC_HISTORY
+            WHERE user_id = #{userId}
+        ]]>
+    </delete>
+
+    <select id="getHistory" resultType="CalcHistoryModel">
+        <![CDATA[
+            SELECT * FROM CALC_HISTORY
+            WHERE user_id = #{userId}
+        ]]>
+    </select>
+
+    <insert id="insertHistory">
+        <![CDATA[
+            INSERT INTO CALC_HISTORY
+            (user_id, menu_img, menu_name, date, cost_of_one)
+            VALUES
+            (#{userId}, #{menuImg}, #{menuName}, #{date}, #{costOfOne})
+        ]]>
+    </insert>
+
+    <insert id="insertIngre">
+        <![CDATA[
+            INSERT INTO INGREDENTS
+            (calc_id, amount, amount_unit, ingre_name, price, unit, amount_used)
+            VALUES
+            (#{calcId}, #{amount}, #{amountUnit}, #{ingreName}, #{price}
+            ,#{unit}, #{amountUsed})
+        ]]>
+    </insert>
+
+    <select id="getIngre" resultType="IngreModel">
+        <![CDATA[
+            SELECT * FROM INGREDENTS
+            WHERE calc_id = #{calcId}
+        ]]>
+    </select>
+</mapper>
